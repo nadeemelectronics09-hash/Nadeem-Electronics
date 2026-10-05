@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact | Nadeem Electronics{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container text-center">
+    <h1>Contact Us</h1>
+    <p class="text-muted">We are ready to help with your product and installment needs.</p>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="admin-card p-4">
+          <h3>Reach Us</h3>
+          <ul class="list-group list-group-flush">
+            {% if settings and settings.phone1 %}<li class="list-group-item">Phone 1: {{ settings.phone1 }}</li>{% endif %}
+            {% if settings and settings.phone2 %}<li class="list-group-item">Phone 2: {{ settings.phone2 }}</li>{% endif %}
+            {% if settings and settings.whatsapp %}<li class="list-group-item">WhatsApp: {{ settings.whatsapp }}</li>{% endif %}
+            {% if settings and settings.email %}<li class="list-group-item">Email: {{ settings.email }}</li>{% endif %}
+            {% if settings and settings.address %}<li class="list-group-item">Address: {{ settings.address }}</li>{% endif %}
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="admin-card p-4">
+          <h3>Send a Message</h3>
+          <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="mb-3">
+              <label class="form-label">Your Name</label>
+              <input class="form-control" type="text" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Your Phone</label>
+              <input class="form-control" type="tel" name="phone" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Message</label>
+              <textarea class="form-control" rows="4" name="message" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Inquiry</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

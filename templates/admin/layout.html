@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Admin{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/showroom-theme.css') }}">
+  </head>
+  <body>
+    <div class="admin-layout">
+      <div class="row g-0 h-100">
+        <aside class="col-lg-2 sidebar p-3">
+          <h4 class="mb-4">{{ site_settings.shop_name if site_settings and site_settings.shop_name else 'Nadeem Electronics' }} Admin</h4>
+          <nav class="nav flex-column">
+            <a class="nav-link {% if request.path == url_for('admin.dashboard') %}active{% endif %}" href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a class="nav-link {% if '/products' in request.path %}active{% endif %}" href="{{ url_for('admin.products') }}">Products</a>
+            <a class="nav-link {% if '/categories' in request.path %}active{% endif %}" href="{{ url_for('admin.categories') }}">Categories</a>
+            <a class="nav-link {% if '/installments' in request.path %}active{% endif %}" href="{{ url_for('admin.installments') }}">Installments</a>
+            <a class="nav-link {% if '/settings' in request.path %}active{% endif %}" href="{{ url_for('admin.settings') }}">Settings</a>
+            <a class="nav-link mt-3" href="{{ url_for('public.index') }}" target="_blank">View Store</a>
+            <a class="nav-link" href="{{ url_for('admin.logout') }}">Logout</a>
+          </nav>
+        </aside>
+
+        <div class="col-lg-10 admin-content">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              <div class="container mt-3">
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category if category in ['success','danger','warning','info'] else 'info' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endwith %}
+
+          {% block admin_content %}{% endblock %}
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>

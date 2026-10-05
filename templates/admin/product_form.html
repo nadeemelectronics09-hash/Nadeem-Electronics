@@ -1,0 +1,98 @@
+{% extends 'admin/layout.html' %}
+
+{% block title %}{% if product %}Edit Product{% else %}Add Product{% endif %} | Nadeem Electronics{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+      <h2 class="mb-1">{% if product %}Edit Product{% else %}Add Product{% endif %}</h2>
+      <p class="text-muted mb-0">Create and update product information.</p>
+    </div>
+  </div>
+
+  <div class="admin-card p-4">
+    <form method="post" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Product Name</label>
+          <input class="form-control" type="text" name="name" value="{{ product.name if product else '' }}" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Product Code</label>
+          <input class="form-control" type="text" name="product_code" value="{{ product.product_code if product else '' }}" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Brand</label>
+          <input class="form-control" type="text" name="brand" value="{{ product.brand if product else '' }}" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Model</label>
+          <input class="form-control" type="text" name="model" value="{{ product.model if product else '' }}" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Category</label>
+          <select class="form-select" name="category_id" required>
+            {% for category in categories %}
+              <option value="{{ category.id }}" {% if product and product.category_id == category.id %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Short Description</label>
+          <textarea class="form-control" name="short_description" rows="3">{{ product.short_description if product else '' }}</textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Full Description</label>
+          <textarea class="form-control" name="full_description" rows="5">{{ product.full_description if product else '' }}</textarea>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">MRP</label>
+          <input class="form-control" type="number" step="0.01" name="mrp" value="{{ product.mrp if product and product.mrp else '' }}">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Cash Price</label>
+          <input class="form-control" type="number" step="0.01" name="cash_price" value="{{ product.cash_price if product and product.cash_price else '' }}">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Down Payment</label>
+          <input class="form-control" type="number" step="0.01" name="down_payment" value="{{ product.down_payment if product and product.down_payment else '' }}">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Stock Status</label>
+          <input class="form-control" type="text" name="stock_status" value="{{ product.stock_status if product else 'In Stock' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Product Image</label>
+          <input class="form-control" type="file" name="image" accept=".jpg,.jpeg,.png,.webp">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Additional Product Images</label>
+          <input class="form-control" type="file" name="gallery_images" accept=".jpg,.jpeg,.png,.webp" multiple>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Specifications</label>
+          <textarea class="form-control" name="specifications" rows="6" placeholder="Example: RAM: 8GB
+Storage: 128GB
+Display: 6.7 inch">{{ specifications if specifications else '' }}</textarea>
+        </div>
+        <div class="col-md-6 d-flex align-items-center gap-3">
+          <div class="form-check mt-4">
+            <input class="form-check-input" type="checkbox" name="featured" id="featured" {% if product and product.featured %}checked{% endif %}>
+            <label class="form-check-label" for="featured">Featured Product</label>
+          </div>
+          <div class="form-check mt-4">
+            <input class="form-check-input" type="checkbox" name="is_active" id="is_active" {% if not product or product.is_active %}checked{% endif %}>
+            <label class="form-check-label" for="is_active">Active</label>
+          </div>
+        </div>
+        <div class="col-12 d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Save Product</button>
+          <a href="{{ url_for('admin.products') }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

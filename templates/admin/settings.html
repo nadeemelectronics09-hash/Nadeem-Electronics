@@ -1,0 +1,78 @@
+{% extends 'admin/layout.html' %}
+
+{% block title %}Shop Settings | Nadeem Electronics{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+      <h2 class="mb-1">Shop Settings</h2>
+      <p class="text-muted mb-0">Manage store identity and contact details.</p>
+    </div>
+  </div>
+
+  <div class="admin-card p-4">
+    <form method="post" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Shop Name</label>
+          <input class="form-control" type="text" name="shop_name" value="{{ settings.shop_name if settings else 'Nadeem Electronics' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Email</label>
+          <input class="form-control" type="email" name="email" value="{{ settings.email if settings and settings.email else '' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Phone 1</label>
+          <input class="form-control" type="text" name="phone1" value="{{ settings.phone1 if settings and settings.phone1 else '' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Phone 2</label>
+          <input class="form-control" type="text" name="phone2" value="{{ settings.phone2 if settings and settings.phone2 else '' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">WhatsApp Number</label>
+          <input class="form-control" type="text" name="whatsapp" value="{{ settings.whatsapp if settings and settings.whatsapp else '' }}">
+          <div class="form-text">Use an international number such as +92 300 1234567. Pakistani local numbers starting with 0 are converted automatically.</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Opening Hours</label>
+          <input class="form-control" type="text" name="opening_hours" value="{{ settings.opening_hours if settings and settings.opening_hours else '' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Facebook Link</label>
+          <input class="form-control" type="url" name="facebook" value="{{ settings.facebook if settings and settings.facebook else '' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Instagram Link</label>
+          <input class="form-control" type="url" name="instagram" value="{{ settings.instagram if settings and settings.instagram else '' }}">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Address</label>
+          <textarea class="form-control" name="address" rows="3">{{ settings.address if settings and settings.address else '' }}</textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Google Maps Link</label>
+          <input class="form-control" type="url" name="google_maps" value="{{ settings.google_maps if settings and settings.google_maps else '' }}">
+        </div>
+        <div class="col-12">
+          <label class="form-label">About Shop</label>
+          <textarea class="form-control" name="about_shop" rows="4">{{ settings.about_shop if settings and settings.about_shop else '' }}</textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Footer Text</label>
+          <input class="form-control" type="text" name="footer_text" value="{{ settings.footer_text if settings and settings.footer_text else '' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Shop Logo</label>
+          <input class="form-control" type="file" name="logo" accept=".jpg,.jpeg,.png,.webp">
+        </div>
+        <div class="col-12 d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Save Settings</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

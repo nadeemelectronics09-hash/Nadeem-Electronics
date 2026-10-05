@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} | Nadeem Electronics{% endblock %}
+
+{% block content %}
+<section class="page-header product-detail-heading">
+  <div class="container">
+    <h1>{{ product.name }}</h1>
+    <p class="text-muted mb-0">{{ product.brand }} | {{ product.model }}</p>
+  </div>
+</section>
+
+<section class="py-5 product-detail-page">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="product-detail-card p-3">
+          <div class="product-gallery-main">
+            {% if product.image %}
+              <img data-gallery-main src="{{ url_for('public.uploaded_file', filename=product.image) }}" alt="{{ product.name }}">
+            {% else %}
+              <img data-gallery-main src="{{ url_for('static', filename='images/placeholder.svg') }}" alt="{{ product.name }}">
+            {% endif %}
+          </div>
+          <div class="thumb-row">
+            {% if product.image %}
+              <button type="button" class="gallery-thumb is-active" data-gallery-src="{{ url_for('public.uploaded_file', filename=product.image) }}" aria-label="Show main {{ product.name }} image">
+                <img src="{{ url_for('public.uploaded_file', filename=product.image) }}" alt="" loading="lazy">
+              </button>
+            {% endif %}
+            {% if product.images %}
+              {% for image in product.images %}
+                <button type="button" class="gallery-thumb" data-gallery-src="{{ url_for('public.uploaded_file', filename=image.image_path) }}" aria-label="Show {{ product.name }} image {{ loop.index }}">
+                  <img src="{{ url_for('public.uploaded_file', filename=image.image_path) }}" alt="" loading="lazy">
+                </button>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="info-box">
+          <div class="text-uppercase text-primary fw-bold mb-2">{{ product.brand }}</div>
+          <h2>{{ product.name }}</h2>
+          <p class="text-muted mb-3">{{ product.model }}</p>
+          <div class="mb-3">
+            {% if product.product_code %}<div class="d-flex justify-content-between border-bottom py-2"><span>Product Code</span><strong>{{ product.product_code }}</strong></div>{% endif %}
+            {% if product.mrp is not none %}<div class="d-flex justify-content-between border-bottom py-2"><span>MRP</span><strong class="{% if product.mrp > 0 and product.cash_price is not none and product.mrp > product.cash_price %}market-price-old{% endif %}">{{ product.mrp }}</strong></div>{% endif %}
+            {% if product.cash_price is not none %}<div class="d-flex justify-content-between border-bottom py-2"><span>Cash Price</span><strong class="product-detail-price">{{ product.cash_price }}</strong></div>{% endif %}
+            {% if product.stock_status %}<div class="d-flex justify-content-between border-bottom py-2"><span>Availability</span><strong>{{ product.stock_status }}</strong></div>{% endif %}
+          </div>
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            {% set inquiry_url = whatsapp_product_url(product) %}
+            {% if inquiry_url %}
+              <a href="{{ inquiry_url }}" target="_blank" rel="noopener noreferrer" class="btn product-contact-icon product-whatsapp-link" aria-label="Ask about {{ product.name }} on WhatsApp" title="WhatsApp">
+                <svg class="product-contact-icon-mark" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2.5a9.4 9.4 0 0 0-8.1 14.2L2.7 22l5.4-1.2A9.5 9.5 0 1 0 12 2.5Z"></path>
+                  <path d="M8.2 7.4c.3-.5.6-.6 1-.6h.4c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4 0 .7.6 1 1.4 1.8 2.4 2.4.3.2.5.2.7-.1l.8-.9c.2-.2.4-.3.7-.2l1.8.9c.3.1.4.3.4.6 0 .4-.3 1.3-.9 1.8-.6.5-1.3.7-2.1.5-1.3-.3-2.7-1.1-4.2-2.6s-2.3-2.9-2.6-4.2c-.2-.8 0-1.5.5-2.1Z"></path>
+                </svg>
+              </a>
+            {% else %}
+              <a href="{{ url_for('public.contact') }}" class="btn btn-outline-primary">Contact the shop</a>
+            {% endif %}
+            {% if site_settings and site_settings.phone1 %}
+              <a href="tel:{{ site_settings.phone1 }}" class="btn product-contact-icon product-call-link" aria-label="Call Nadeem Electronics" title="Call">
+                <svg class="product-contact-icon-mark" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.1 3.5h2.6l1.2 4.3-1.8 1.5a14 14 0 0 0 5.6 5.6l1.5-1.8 4.3 1.2v2.6c0 1.2-1 2.1-2.2 2.1C10.7 19 5 13.3 5 5.7c0-1.2.9-2.2 2.1-2.2Z"></path>
+                </svg>
+              </a>
+            {% endif %}
+          </div>
+          {% if product.short_description %}<div class="small text-muted">{{ product.short_description }}</div>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5 g-4">
+      <div class="col-lg-7">
+        <div class="admin-card p-4">
+          <h3 class="mb-3">Description</h3>
+          {% if product.full_description or product.short_description %}
+          <p>{{ product.full_description or product.short_description }}</p>
+          {% else %}
+          <p class="text-muted mb-0">Product description has not been provided by the shop.</p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="admin-card p-4">
+          <h3 class="mb-3">Specifications</h3>
+          {% if product.specifications %}
+            <ul class="list-group list-group-flush">
+              {% for spec in product.specifications %}
+                <li class="list-group-item d-flex justify-content-between"><span>{{ spec.name }}</span><strong>{{ spec.value }}</strong></li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted mb-0">No specifications were added for this product.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <h3 class="mb-3">Available Installment Plans</h3>
+      {% if plans %}
+      <div class="row g-3">
+        {% for plan in plans %}
+        <div class="col-sm-6 col-xl-4">
+          <article class="installment-card h-100">
+            <span class="duration-pill">{{ plan.duration_months }} months</span>
+            <div class="mt-3">
+              {% if plan.down_payment is not none %}<div class="installment-value-row"><span>Down payment</span><strong>{{ plan.down_payment }}</strong></div>{% endif %}
+              {% if plan.monthly_installment is not none %}<div class="installment-value-row is-highlight"><span>Monthly</span><strong>{{ plan.monthly_installment }}</strong></div>{% endif %}
+              {% if plan.total_amount is not none %}<div class="installment-value-row"><span>Total amount</span><strong>{{ plan.total_amount }}</strong></div>{% endif %}
+              {% if plan.cash_price is not none %}<div class="installment-value-row"><span>Cash price</span><strong>{{ plan.cash_price }}</strong></div>{% endif %}
+              {% if plan.processing_fee is not none %}<div class="installment-value-row"><span>Processing fee</span><strong>{{ plan.processing_fee }}</strong></div>{% endif %}
+            </div>
+            {% set plan_message = 'Assalam-o-Alaikum, I am interested in ' ~ product.name ~ ' (' ~ product.model ~ ') and the ' ~ plan.duration_months ~ '-month installment plan. Please share details.' %}
+            {% set plan_whatsapp_url = whatsapp_message_url(plan_message) %}
+            {% if plan_whatsapp_url %}
+              <a href="{{ plan_whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp w-100 mt-3">Ask about this plan on WhatsApp</a>
+            {% endif %}
+          </article>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="alert alert-info">No installment plans have been added for this product yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'admin/layout.html' %}
+
+{% block title %}{% if plan %}Edit Installment Plan{% else %}Add Installment Plan{% endif %} | Nadeem Electronics{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+      <h2 class="mb-1">{% if plan %}Edit Installment Plan{% else %}Add Installment Plan{% endif %}</h2>
+      <p class="text-muted mb-0">Manage financing options for selected products.</p>
+    </div>
+  </div>
+
+  <div class="admin-card p-4">
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Product</label>
+          <select class="form-select" name="product_id" required>
+            {% for product in products %}
+              <option value="{{ product.id }}" {% if plan and plan.product_id == product.id %}selected{% endif %}>{{ product.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Duration in Months</label>
+          <input class="form-control" type="number" name="duration_months" value="{{ plan.duration_months if plan else '' }}" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Down Payment</label>
+          <input class="form-control" type="number" step="0.01" name="down_payment" value="{{ plan.down_payment if plan and plan.down_payment else '' }}">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Monthly Installment</label>
+          <input class="form-control" type="number" step="0.01" name="monthly_installment" value="{{ plan.monthly_installment if plan and plan.monthly_installment else '' }}">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Total Amount</label>
+          <input class="form-control" type="number" step="0.01" name="total_amount" value="{{ plan.total_amount if plan and plan.total_amount else '' }}">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Cash Price</label>
+          <input class="form-control" type="number" step="0.01" name="cash_price" value="{{ plan.cash_price if plan and plan.cash_price else '' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Processing Fee</label>
+          <input class="form-control" type="number" step="0.01" name="processing_fee" value="{{ plan.processing_fee if plan and plan.processing_fee else '' }}">
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+          <div class="form-check mt-4">
+            <input class="form-check-input" type="checkbox" name="is_active" id="is_active" {% if not plan or plan.is_active %}checked{% endif %}>
+            <label class="form-check-label" for="is_active">Active</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Notes</label>
+          <textarea class="form-control" name="notes" rows="4">{{ plan.notes if plan else '' }}</textarea>
+        </div>
+        <div class="col-12 d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Save Plan</button>
+          <a href="{{ url_for('admin.installments') }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

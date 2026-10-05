@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Installment Plans | Nadeem Electronics{% endblock %}
+
+{% block content %}
+<section class="page-header installments-heading">
+  <div class="container text-center">
+    <h1>Installment Plans</h1>
+    <p class="text-muted">Flexible monthly plans from our catalog.</p>
+  </div>
+</section>
+
+<section class="py-5 installments-page">
+  <div class="container">
+    <div class="row g-3">
+      {% for plan in plans %}
+      <div class="col-sm-6 col-xl-4">
+        <article class="installment-card h-100">
+          <div class="d-flex align-items-start justify-content-between gap-3 mb-3">
+            <div>
+              <span class="installment-eyebrow">{{ plan.product.brand }}</span>
+              <h2 class="installment-product">{{ plan.product.name }}</h2>
+              <p class="installment-model mb-0">{{ plan.product.model }}</p>
+            </div>
+            <span class="duration-pill">{{ plan.duration_months }} mo</span>
+          </div>
+          {% if plan.down_payment is not none %}<div class="installment-value-row"><span>Down payment</span><strong>{{ plan.down_payment }}</strong></div>{% endif %}
+          {% if plan.monthly_installment is not none %}<div class="installment-value-row is-highlight"><span>Monthly</span><strong>{{ plan.monthly_installment }}</strong></div>{% endif %}
+          {% if plan.total_amount is not none %}<div class="installment-value-row"><span>Total amount</span><strong>{{ plan.total_amount }}</strong></div>{% endif %}
+          <a class="btn btn-outline-primary w-100 mt-3" href="{{ url_for('public.product_detail', product_id=plan.product_id) }}">View Product <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+      {% else %}
+      <div class="col-12">
+        <div class="empty-state">
+          <span class="empty-state-icon">↗</span>
+          <h2>No plans available yet</h2>
+          <p>Installment plans will appear here once they are added to products.</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

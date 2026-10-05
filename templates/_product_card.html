@@ -1,0 +1,17 @@
+<article class="market-product-card h-100">
+  <div class="market-product-image-wrap">
+    <a href="{{ url_for('public.product_detail', product_id=product.id) }}" class="market-product-image-link" aria-label="View {{ product.name }}">
+      {% if product.image %}
+      <img class="market-product-image" src="{{ url_for('public.uploaded_file', filename=product.image) }}" alt="{{ product.brand }} {{ product.name }} {{ product.model }}" loading="lazy">
+      {% else %}
+      <img class="market-product-image" src="{{ url_for('static', filename='images/placeholder.svg') }}" alt="{{ product.name }} product image placeholder" loading="lazy">
+      {% endif %}
+    </a>
+  </div>
+  <div class="market-product-body market-product-price-only">
+    <div class="market-price-label">MRP</div>
+    <div class="market-price-current">
+      {% if product.mrp is not none %}{{ product.mrp }}{% else %}Price unavailable{% endif %}
+    </div>
+  </div>
+</article>

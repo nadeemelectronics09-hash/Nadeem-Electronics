@@ -1,0 +1,58 @@
+{% extends 'admin/layout.html' %}
+
+{% block title %}Manage Categories | Nadeem Electronics{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+      <h2 class="mb-1">Category Management</h2>
+      <p class="text-muted mb-0">Create, edit, and manage catalog categories.</p>
+    </div>
+    <a href="{{ url_for('admin.add_category') }}" class="btn btn-primary">Add Category</a>
+  </div>
+
+  <div class="admin-card p-3">
+    <div class="table-responsive">
+      <table class="table table-striped align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for category in categories %}
+          <tr>
+            <td>
+              {% if category.image %}
+                <img src="{{ url_for('public.uploaded_file', filename=category.image) }}" alt="{{ category.name }}" style="width:60px;height:60px;object-fit:cover;border-radius:10px;">
+              {% else %}
+                <img src="{{ url_for('static', filename='images/placeholder.svg') }}" alt="{{ category.name }}" style="width:60px;height:60px;object-fit:cover;border-radius:10px;">
+              {% endif %}
+            </td>
+            <td>{{ category.name }}</td>
+            <td>{{ category.description or 'No description' }}</td>
+            <td>{{ 'Active' if category.is_active else 'Inactive' }}</td>
+            <td>
+              <div class="d-flex gap-2">
+                <a href="{{ url_for('admin.edit_category', category_id=category.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                <form method="post" action="{{ url_for('admin.delete_category', category_id=category.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button type="submit" class="btn btn-sm btn-outline-danger" data-confirm-delete>Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" class="text-center text-muted">No categories have been added yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

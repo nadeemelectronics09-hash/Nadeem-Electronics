@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ category.name }} | Nadeem Electronics{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <h1>{{ category.name }}</h1>
+    <p class="text-muted mb-0">{{ category.description or 'Browse electronics in this category.' }}</p>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      {% for product in products %}
+      <div class="col-6 col-lg-4">{% include '_product_card.html' %}</div>
+      {% else %}
+      <div class="col-12"><div class="empty-state market-empty-state"><h2>No products in this category</h2><p>Check back as the shop updates its catalog.</p></div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

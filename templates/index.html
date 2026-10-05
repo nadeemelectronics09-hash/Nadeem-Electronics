@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | Nadeem Electronics{% endblock %}
+
+{% block content %}
+<section class="dashboard-search-section">
+  <div class="container">
+    <form class="dashboard-search" action="{{ url_for('public.search') }}" method="get" role="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+      <input type="search" name="q" placeholder="Search products, brands, or models" aria-label="Search products, brands, or models">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</section>
+
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <h1>{{ site_settings.shop_name if site_settings and site_settings.shop_name else 'Nadeem Electronics' }}</h1>
+      <div class="hero-actions">
+        <a href="{{ url_for('public.shop') }}" class="btn btn-light hero-cta">Shop <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dashboard-section dashboard-categories">
+  <div class="container">
+    <div class="dashboard-section-heading">
+      <div>
+        <h2 class="section-title">Categories</h2>
+      </div>
+    </div>
+    <div class="row g-3 dashboard-category-grid">
+      {% for category in categories %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="{{ url_for('public.category_detail', category_id=category.id) }}" class="dashboard-category-link">
+          <div class="dashboard-category-card">
+            {% if category.image %}
+              <img src="{{ url_for('public.uploaded_file', filename=category.image) }}" alt="{{ category.name }}" loading="lazy">
+            {% else %}
+              <img src="{{ url_for('static', filename='images/placeholder.svg') }}" alt="{{ category.name }}" loading="lazy">
+            {% endif %}
+            <span class="dashboard-category-name">{{ category.name }}</span>
+            <span class="dashboard-category-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </div>
+      {% else %}
+      <div class="col-12">
+        <div class="dashboard-empty-state">No categories yet.</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="dashboard-section dashboard-featured">
+  <div class="container">
+    <div class="dashboard-section-heading dashboard-section-heading-row">
+      <div>
+        <h2 class="section-title">Featured products</h2>
+      </div>
+      <a href="{{ url_for('public.shop') }}" class="dashboard-text-link">View all <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="row g-3 g-lg-4 dashboard-product-grid">
+      {% for product in featured_products %}
+      <div class="col-6 col-lg-4">{% include '_product_card.html' %}</div>
+      {% else %}
+      <div class="col-12">
+        <div class="dashboard-empty-state">No featured products yet.</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="dashboard-section dashboard-new-arrivals">
+  <div class="container">
+    <div class="dashboard-section-heading dashboard-section-heading-row">
+      <div>
+        <h2 class="section-title">New arrivals</h2>
+      </div>
+      <a href="{{ url_for('public.shop') }}" class="dashboard-text-link">View all <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="row g-3 g-lg-4 dashboard-product-grid">
+      {% for product in latest_products %}
+      <div class="col-6 col-lg-3">{% include '_product_card.html' %}</div>
+      {% else %}
+      <div class="col-12">
+        <div class="dashboard-empty-state">No new arrivals yet.</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

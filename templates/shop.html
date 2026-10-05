@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Shop | Nadeem Electronics{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <div>
+        <span class="eyebrow-label">THE COLLECTION</span>
+        <h1 class="section-title mb-0">Shop products</h1>
+        <p class="section-subtitle mb-0">{{ products_page.total }} products in the catalog</p>
+      </div>
+    </div>
+
+    <form class="shop-filters mb-4" action="{{ url_for('public.shop') }}" method="get">
+      <div class="row g-2">
+        <div class="col-lg-4">
+          <input class="form-control" type="search" name="search" value="{{ filters.search }}" placeholder="Search products, brands, models, codes, categories..." aria-label="Search shop products">
+        </div>
+        <div class="col-sm-6 col-lg-2">
+          <select class="form-select" name="category" aria-label="Filter by category">
+            <option value="">All categories</option>
+            {% for category in nav_categories %}
+            <option value="{{ category.id }}" {% if filters.category == category.id %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-sm-6 col-lg-2">
+          <select class="form-select" name="brand" aria-label="Filter by brand">
+            <option value="">All brands</option>
+            {% for brand in brands %}
+            <option value="{{ brand }}" {% if filters.brand == brand %}selected{% endif %}>{{ brand }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-sm-6 col-lg-2">
+          <select class="form-select" name="sort" aria-label="Sort products">
+            <option value="newest" {% if filters.sort == 'newest' %}selected{% endif %}>Newest</option>
+            <option value="price_low" {% if filters.sort == 'price_low' %}selected{% endif %}>Price: low to high</option>
+            <option value="price_high" {% if filters.sort == 'price_high' %}selected{% endif %}>Price: high to low</option>
+          </select>
+        </div>
+        <div class="col-sm-6 col-lg-2">
+          <select class="form-select" name="availability" aria-label="Filter by availability">
+            <option value="" {% if not filters.availability %}selected{% endif %}>Any availability</option>
+            <option value="available" {% if filters.availability == 'available' %}selected{% endif %}>Available</option>
+            <option value="unavailable" {% if filters.availability == 'unavailable' %}selected{% endif %}>Unavailable</option>
+          </select>
+        </div>
+        <div class="col-sm-6 col-lg-2">
+          <input class="form-control" type="number" min="0" step="0.01" name="min_price" value="{{ filters.min_price if filters.min_price is not none else '' }}" placeholder="Min price" aria-label="Minimum price">
+        </div>
+        <div class="col-sm-6 col-lg-2">
+          <input class="form-control" type="number" min="0" step="0.01" name="max_price" value="{{ filters.max_price if filters.max_price is not none else '' }}" placeholder="Max price" aria-label="Maximum price">
+        </div>
+        <div class="col-sm-6 col-lg-2">
+          <label class="discount-filter"><input type="checkbox" name="discount" value="1" {% if filters.discount %}checked{% endif %}> Discounted</label>
+        </div>
+        <div class="col-sm-6 col-lg-2 d-grid">
+          <button class="btn btn-primary" type="submit">Apply</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="row g-4">
+      {% for product in products_page.items %}
+      <div class="col-6 col-lg-4">{% include '_product_card.html' %}</div>
+      {% else %}
+      <div class="col-12"><div class="empty-state"><h2>No products found</h2><p>Try changing your search or filters.</p></div></div>
+      {% endfor %}
+    </div>
+
+    {% if products_page.pages > 1 %}
+    <nav aria-label="Shop product pagination" class="mt-5">
+      <ul class="pagination justify-content-center">
+        {% if products_page.has_prev %}
+        <li class="page-item"><a class="page-link" href="{{ url_for('public.shop', page=products_page.prev_num, search=filters.search, category=filters.category, brand=filters.brand, sort=filters.sort, min_price=filters.min_price, max_price=filters.max_price, availability=filters.availability, discount=1 if filters.discount else None) }}">Previous</a></li>
+        {% endif %}
+        {% for page_num in products_page.iter_pages() %}
+          {% if page_num %}
+          <li class="page-item {% if products_page.page == page_num %}active{% endif %}"><a class="page-link" href="{{ url_for('public.shop', page=page_num, search=filters.search, category=filters.category, brand=filters.brand, sort=filters.sort, min_price=filters.min_price, max_price=filters.max_price, availability=filters.availability, discount=1 if filters.discount else None) }}">{{ page_num }}</a></li>
+          {% else %}
+          <li class="page-item disabled"><span class="page-link">…</span></li>
+          {% endif %}
+        {% endfor %}
+        {% if products_page.has_next %}
+        <li class="page-item"><a class="page-link" href="{{ url_for('public.shop', page=products_page.next_num, search=filters.search, category=filters.category, brand=filters.brand, sort=filters.sort, min_price=filters.min_price, max_price=filters.max_price, availability=filters.availability, discount=1 if filters.discount else None) }}">Next</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+
+    <div id="shop-info" class="shop-profile-panel row g-4 mt-5">
+      <div class="col-lg-6">
+        <div class="admin-card p-4">
+          <div class="shop-identity">
+            {% if settings and settings.logo %}
+            <img src="{{ url_for('public.uploaded_file', filename=settings.logo) }}" alt="{{ settings.shop_name }} logo" class="shop-logo">
+            {% endif %}
+            <h3>{{ settings.shop_name if settings and settings.shop_name else 'Electronics Showroom' }}</h3>
+          </div>
+          {% if settings and settings.about_shop %}<p>{{ settings.about_shop }}</p>{% endif %}
+          <ul class="list-group list-group-flush">
+            {% if settings and settings.address %}<li class="list-group-item">Address: {{ settings.address }}</li>{% endif %}
+            {% if settings and settings.phone1 %}<li class="list-group-item">Phone 1: {{ settings.phone1 }}</li>{% endif %}
+            {% if settings and settings.phone2 %}<li class="list-group-item">Phone 2: {{ settings.phone2 }}</li>{% endif %}
+            {% if settings and settings.email %}<li class="list-group-item">Email: {{ settings.email }}</li>{% endif %}
+            {% if settings and settings.opening_hours %}<li class="list-group-item">Opening Hours: {{ settings.opening_hours }}</li>{% endif %}
+          </ul>
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            {% if settings and settings.facebook and settings.facebook != '#' %}<a class="btn btn-outline-primary btn-sm" href="{{ settings.facebook }}" target="_blank" rel="noopener noreferrer">Facebook</a>{% endif %}
+            {% if settings and settings.instagram and settings.instagram != '#' %}<a class="btn btn-outline-primary btn-sm" href="{{ settings.instagram }}" target="_blank" rel="noopener noreferrer">Instagram</a>{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="admin-card p-4">
+          <h3>Visit Us</h3>
+          {% if settings and settings.google_maps and settings.google_maps != '#' %}
+            <a href="{{ settings.google_maps }}" class="btn btn-outline-primary" target="_blank" rel="noopener noreferrer">Open map</a>
+          {% endif %}
+          {% if whatsapp_contact_url %}
+            <a href="{{ whatsapp_contact_url }}" class="btn btn-whatsapp" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+          {% endif %}
+          {% if not (settings and (settings.google_maps and settings.google_maps != '#' or settings.whatsapp)) %}
+          <p class="text-muted mb-0">Visit and contact information will be available here when configured by the shop.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

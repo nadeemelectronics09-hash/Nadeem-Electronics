@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Product image placeholder">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#12365b"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#168bff" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#168bff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#background)"/>
+  <circle cx="400" cy="300" r="280" fill="url(#glow)"/>
+  <g fill="none" stroke="#48c7ff" stroke-opacity=".55" stroke-width="3">
+    <path d="M0 154h148l42 42h68M800 443H640l-40-40h-75M162 600V480l34-34v-54M600 0v104l-44 44v66"/>
+    <circle cx="258" cy="238" r="6" fill="#48c7ff"/>
+    <circle cx="525" cy="366" r="6" fill="#48c7ff"/>
+    <circle cx="198" cy="392" r="6" fill="#48c7ff"/>
+  </g>
+  <g fill="none" stroke="#c6edff" stroke-width="5" stroke-linejoin="round">
+    <rect x="286" y="190" width="228" height="176" rx="18"/>
+    <path d="M256 400h288l-22 18H278z"/>
+    <path d="M326 235h148M326 269h108M326 303h126"/>
+  </g>
+  <text x="400" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="3" fill="#a9dcff">PRODUCT IMAGE</text>
+</svg>
