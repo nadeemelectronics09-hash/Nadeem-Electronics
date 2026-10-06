@@ -1,0 +1,43 @@
+{% extends 'admin/layout.html' %}
+
+{% block title %}Newsletter Subscribers | Nadeem Electronics{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+      <h2 class="mb-1">Newsletter subscribers</h2>
+      <p class="text-muted mb-0">People who opted in to receive product and installment updates.</p>
+    </div>
+    <span class="badge text-bg-primary">{{ subscribers|length }} subscribers</span>
+  </div>
+
+  <div class="admin-card p-3 p-md-4">
+    {% if subscribers %}
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead>
+          <tr><th scope="col">Email</th><th scope="col">Subscribed</th><th scope="col">Action</th></tr>
+        </thead>
+        <tbody>
+          {% for subscriber in subscribers %}
+          <tr>
+            <td><a href="mailto:{{ subscriber.email }}">{{ subscriber.email }}</a></td>
+            <td>{{ subscriber.subscribed_at.strftime('%Y-%m-%d %H:%M UTC') }}</td>
+            <td>
+              <form method="post" action="{{ url_for('admin.delete_newsletter_subscriber', subscriber_id=subscriber.id) }}" onsubmit="return confirm('Remove this subscriber?');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn btn-sm btn-outline-danger" type="submit">Remove</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted mb-0">There are no newsletter subscribers yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

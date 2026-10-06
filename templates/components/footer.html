@@ -1,7 +1,7 @@
 <div class="mobile-quick-actions" aria-label="Main navigation">
   <a class="{% if request.endpoint == 'public.index' %}active{% endif %}" href="{{ url_for('public.index') }}">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg>
-    <span>Dashboard</span>
+    <span>Home</span>
   </a>
   <a class="{% if request.endpoint in ['public.shop', 'public.products', 'public.search', 'public.product_detail'] %}active{% endif %}" href="{{ url_for('public.shop') }}">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v13H3z"></path><path d="M8 21h8M12 17v4"></path><path d="M7 8h4M7 11h8"></path></svg>
@@ -13,37 +13,98 @@
   </a>
 </div>
 
-<footer class="site-footer py-5 mt-5">
+<footer class="site-footer" id="site-footer">
   <div class="container">
-    <div class="row g-4">
-      <div class="col-lg-4">
-        <h5>{{ site_settings.shop_name if site_settings and site_settings.shop_name else 'Nadeem Electronics' }}</h5>
-        <p>{{ site_settings.about_shop if site_settings and site_settings.about_shop else 'Quality products and flexible financing for your home and business.' }}</p>
+    <div class="footer-contact-banner">
+      <div>
+        <span class="footer-eyebrow">HERE TO HELP</span>
+        <h2>Need a hand choosing?</h2>
+        <p>Talk to our team about products, availability, and installment options.</p>
       </div>
-      <div class="col-lg-4">
-        <h5>Quick Links</h5>
-        <ul class="list-unstyled footer-links">
-          <li><a href="{{ url_for('public.products') }}">Products</a></li>
-          <li><a href="{{ url_for('public.categories') }}">Categories</a></li>
-          <li><a href="{{ url_for('public.installments') }}">Installment Plans</a></li>
-          <li><a href="{{ url_for('public.contact') }}">Contact</a></li>
-        </ul>
-      </div>
-      <div class="col-lg-4">
-        <h5>Contact</h5>
-        <ul class="list-unstyled footer-links">
-          {% if site_settings and site_settings.phone1 %}<li>{{ site_settings.phone1 }}</li>{% endif %}
-          {% if site_settings and site_settings.email %}<li>{{ site_settings.email }}</li>{% endif %}
-          {% if site_settings and site_settings.address %}<li>{{ site_settings.address }}</li>{% endif %}
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom mt-4 pt-3 border-top text-center">
-      {% if site_settings and site_settings.footer_text %}
-        {{ site_settings.footer_text }}
+      {% if whatsapp_contact_url %}
+      <a class="footer-contact-cta" href="{{ whatsapp_contact_url }}" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.4-4.7a8.5 8.5 0 1 1 16.1-4.1Z"></path><path d="M8.6 8.1c.2-.4.5-.5.8-.5h.4l1 2.1c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4 0 .7.6 1 1.4 1.8 2.4 2.3.3.2.5.1.7-.1l.8-1c.2-.2.4-.3.7-.1l2 1c.3.1.4.3.4.6 0 .4-.3 1.2-.8 1.7-.6.5-1.2.7-2 .5-1.2-.3-2.6-1-4-2.4-1.4-1.4-2.2-2.8-2.5-4-.2-.7 0-1.4.8-2.2Z"></path></svg>
+        Chat on WhatsApp <span aria-hidden="true">→</span>
+      </a>
       {% else %}
-        © 2025 Nadeem Electronics. All rights reserved.
+      <a class="footer-contact-cta" href="{{ url_for('public.contact') }}">Contact our team <span aria-hidden="true">→</span></a>
       {% endif %}
+    </div>
+
+    <div class="footer-main">
+      <section class="footer-brand" aria-labelledby="footer-brand-heading">
+        <a class="footer-brand-name" href="{{ url_for('public.index') }}" id="footer-brand-heading">
+          {% if site_settings and site_settings.logo %}
+          <img src="{{ url_for('public.uploaded_file', filename=site_settings.logo) }}" alt="">
+          {% else %}
+          <span class="footer-brand-mark" aria-hidden="true">N</span>
+          {% endif %}
+          <span>{{ site_settings.shop_name if site_settings and site_settings.shop_name else 'Nadeem Electronics' }}</span>
+        </a>
+        <p>{{ site_settings.about_shop if site_settings and site_settings.about_shop else 'Quality electronics, trusted advice, and flexible installment options for your home and business.' }}</p>
+        {% if site_settings and site_settings.opening_hours %}
+        <div class="footer-hours">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+          <span>{{ site_settings.opening_hours }}</span>
+        </div>
+        {% endif %}
+      </section>
+
+      <nav class="footer-column" aria-labelledby="footer-explore-heading">
+        <h2 id="footer-explore-heading">Explore</h2>
+        <ul class="footer-links">
+          <li><a href="{{ url_for('public.shop') }}">Shop all products</a></li>
+          <li><a href="{{ url_for('public.categories') }}">Browse categories</a></li>
+          <li><a href="{{ url_for('public.installments') }}">Installment plans</a></li>
+          <li><a href="{{ url_for('public.contact') }}">Contact us</a></li>
+        </ul>
+      </nav>
+
+      <section class="footer-column footer-contact-details" aria-labelledby="footer-contact-heading">
+        <h2 id="footer-contact-heading">Get in touch</h2>
+        <ul class="footer-links">
+          {% if site_settings and site_settings.phone1 %}
+          <li><a href="tel:{{ site_settings.phone1|replace(' ', '')|replace('-', '')|replace('(', '')|replace(')', '') }}">{{ site_settings.phone1 }}</a></li>
+          {% endif %}
+          {% if site_settings and site_settings.phone2 %}
+          <li><a href="tel:{{ site_settings.phone2|replace(' ', '')|replace('-', '')|replace('(', '')|replace(')', '') }}">{{ site_settings.phone2 }}</a></li>
+          {% endif %}
+          {% if site_settings and site_settings.email %}
+          <li><a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a></li>
+          {% endif %}
+          {% if site_settings and site_settings.address %}
+          <li class="footer-address">
+            {% if site_settings.google_maps and site_settings.google_maps.startswith(('https://', 'http://')) %}
+            <a href="{{ site_settings.google_maps }}" target="_blank" rel="noopener noreferrer">{{ site_settings.address }} <span aria-hidden="true">↗</span></a>
+            {% else %}
+            <a href="https://www.google.com/maps/search/?api=1&amp;query={{ site_settings.address|urlencode }}" target="_blank" rel="noopener noreferrer">{{ site_settings.address }} <span aria-hidden="true">↗</span></a>
+            {% endif %}
+          </li>
+          {% endif %}
+        </ul>
+      </section>
+
+      {% if (site_settings and (site_settings.facebook or site_settings.instagram)) or whatsapp_contact_url %}
+      <nav class="footer-column footer-social-column" aria-labelledby="footer-follow-heading">
+        <h2 id="footer-follow-heading">Follow &amp; connect</h2>
+        <ul class="footer-social-links">
+          {% if whatsapp_contact_url %}
+          <li><a href="{{ whatsapp_contact_url }}" target="_blank" rel="noopener noreferrer"><span class="footer-social-icon" aria-hidden="true">W</span> WhatsApp</a></li>
+          {% endif %}
+          {% if site_settings and site_settings.facebook and site_settings.facebook.startswith(('https://', 'http://')) %}
+          <li><a href="{{ site_settings.facebook }}" target="_blank" rel="noopener noreferrer"><span class="footer-social-icon" aria-hidden="true">f</span> Facebook</a></li>
+          {% endif %}
+          {% if site_settings and site_settings.instagram and site_settings.instagram.startswith(('https://', 'http://')) %}
+          <li><a href="{{ site_settings.instagram }}" target="_blank" rel="noopener noreferrer"><span class="footer-social-icon" aria-hidden="true">◎</span> Instagram</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+
+    <div class="footer-bottom">
+      <span>{{ site_settings.footer_text if site_settings and site_settings.footer_text else '© 2026 Nadeem Electronics. All rights reserved.' }}</span>
+      <a href="{{ url_for('public.contact') }}">Contact the showroom <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </footer>

@@ -15,6 +15,8 @@ SECTION_DEFAULTS = (
     {"key": "categories", "label": "Categories", "visible": True, "order": 3},
     {"key": "featured", "label": "Featured products", "visible": True, "order": 4},
     {"key": "new_arrivals", "label": "New arrivals", "visible": True, "order": 5},
+    {"key": "promotion", "label": "Installment promotion", "visible": True, "order": 6},
+    {"key": "newsletter", "label": "Email updates signup", "visible": True, "order": 7},
 )
 
 DEFAULT_DESIGN_SETTINGS = {
@@ -30,7 +32,7 @@ DEFAULT_DESIGN_SETTINGS = {
     "card_radius": 14,
     "section_spacing": 56,
     "hero_title": "",
-    "hero_subtitle": "",
+    "hero_subtitle": "Shop TVs, speakers, phones and more, with trusted advice and flexible installment options.",
     "hero_button_text": "Shop",
     "hero_image": "",
     "homepage_sections": [

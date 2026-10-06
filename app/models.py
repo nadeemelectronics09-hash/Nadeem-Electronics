@@ -126,3 +126,11 @@ class WebsiteDesign(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     settings = db.Column(JSON, nullable=False, default=dict)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class NewsletterSubscriber(db.Model):
+    __tablename__ = "newsletter_subscriber"
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(254), unique=True, nullable=False, index=True)
+    subscribed_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

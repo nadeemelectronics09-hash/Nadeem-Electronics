@@ -1,0 +1,19 @@
+<section class="home-newsletter-section" id="newsletter" aria-labelledby="newsletter-heading">
+  <div class="container">
+    <div class="home-newsletter">
+      <div class="home-newsletter-copy">
+        <span class="home-newsletter-eyebrow">THE LATEST FROM OUR SHOWROOM</span>
+        <h2 id="newsletter-heading">Good gear. Straight to your inbox.</h2>
+        <p>Sign up for product and installment updates from Nadeem Electronics.</p>
+      </div>
+      <form class="newsletter-form" action="{{ url_for('public.newsletter_subscribe') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label class="visually-hidden" for="newsletter-email">Email address</label>
+        <input id="newsletter-email" type="email" name="email" maxlength="254" autocomplete="email" placeholder="Your email address" required>
+        <label class="newsletter-honeypot" aria-hidden="true">Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        <button type="submit">Sign me up <span aria-hidden="true">→</span></button>
+        <p class="newsletter-consent">By subscribing, you agree to receive store updates. You can request removal through our <a href="{{ url_for('public.contact') }}">contact page</a>.</p>
+      </form>
+    </div>
+  </div>
+</section>

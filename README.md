@@ -89,6 +89,7 @@ Change this immediately after login in production.
 - `/admin/installments`
 - `/admin/settings`
 - `/admin/design` — global storefront theme, hero content/image, and homepage section visibility/order
+- `/admin/newsletter` — review and remove email update subscribers
 
 ## Notes
 
@@ -125,14 +126,27 @@ component once. To update product-card markup, edit
 `templates/_product_card.html`. Existing Flask routes, page templates, and
 admin forms continue to provide their own content and behavior.
 
+The shared footer uses the shop profile's configured logo, description, hours,
+phone numbers, email, address, map, and social links. Phone/email/map/social
+actions are only rendered as working links when the corresponding setting is
+available; WhatsApp opens the existing configured shop contact. Footer
+navigation points to the existing storefront routes.
+
 The Website Design page saves its settings separately in the `website_design`
 database table. On startup, SQLAlchemy's `create_all()` creates that new table
 when it is missing; it does not replace existing catalog tables or records.
 The controls cover global storefront colors, built-in font choices, button and
 card corner radius, section spacing, hero heading/subtitle/button/image, and
 visibility/order of the homepage search, hero, categories, featured products,
-and new-arrival areas. Uploaded hero artwork is stored under the existing
-uploads directory. Resetting design settings does not delete catalog content.
+new arrivals, installment promotion, and newsletter areas. Uploaded hero
+artwork is stored under the existing uploads directory. Resetting design
+settings does not delete catalog content.
+
+The homepage also includes an installment-plan promotion and email updates
+signup. Newsletter addresses are validated, stored separately in the
+`newsletter_subscriber` table after signup, and manageable by an authenticated
+admin at `/admin/newsletter`. This stores the opt-in list; it does not send
+email automatically and requires an email delivery service for campaigns.
 
 ## Local UI verification
 

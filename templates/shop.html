@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <form class="shop-filters mb-4" action="{{ url_for('public.shop') }}" method="get">
+    <form class="shop-filters mb-4" id="shop-search" action="{{ url_for('public.shop') }}" method="get">
       <div class="row g-2">
         <div class="col-lg-4">
           <input class="form-control" type="search" name="search" value="{{ filters.search }}" placeholder="Search products, brands, models, codes, categories..." aria-label="Search shop products">

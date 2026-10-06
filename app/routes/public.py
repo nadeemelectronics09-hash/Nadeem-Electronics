@@ -1,5 +1,6 @@
 from decimal import InvalidOperation
 
+from email_validator import EmailNotValidError, validate_email
 from flask import (
     Blueprint,
     abort,
@@ -12,9 +13,10 @@ from flask import (
     url_for,
 )
 from sqlalchemy import or_
+from sqlalchemy.exc import IntegrityError
 
 from app.extensions import db
-from app.models import Category, InstallmentPlan, Product, ShopSettings
+from app.models import Category, InstallmentPlan, NewsletterSubscriber, Product, ShopSettings
 
 public_bp = Blueprint("public", __name__)
 
@@ -130,6 +132,35 @@ def installments():
         .all()
     )
     return render_template("installments.html", plans=plans)
+
+
+@public_bp.route("/newsletter/subscribe", methods=["POST"])
+def newsletter_subscribe():
+    email = request.form.get("email", "").strip()
+    if request.form.get("website", "").strip():
+        return redirect(url_for("public.index", _anchor="newsletter"))
+
+    try:
+        normalized_email = validate_email(email, check_deliverability=False).normalized.lower()
+    except EmailNotValidError:
+        flash("Enter a valid email address to subscribe.", "danger")
+        return redirect(url_for("public.index", _anchor="newsletter"))
+
+    if NewsletterSubscriber.query.filter_by(email=normalized_email).first():
+        flash("This email is already subscribed to store updates.", "info")
+        return redirect(url_for("public.index", _anchor="newsletter"))
+
+    db.session.add(NewsletterSubscriber(email=normalized_email))
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        if NewsletterSubscriber.query.filter_by(email=normalized_email).first() is None:
+            raise
+        flash("This email is already subscribed to store updates.", "info")
+    else:
+        flash("You are subscribed to Nadeem Electronics store updates.", "success")
+    return redirect(url_for("public.index", _anchor="newsletter"))
 
 
 @public_bp.route("/shop")

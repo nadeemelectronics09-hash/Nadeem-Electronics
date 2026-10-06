@@ -1,6 +1,9 @@
 <article class="market-product-card h-100">
   <div class="market-product-image-wrap">
     <a href="{{ url_for('public.product_detail', product_id=product.id) }}" class="market-product-image-link" aria-label="View {{ product.name }}">
+      {% if product.mrp is not none and product.cash_price is not none and product.mrp > product.cash_price and product.mrp > 0 %}
+      <span class="market-product-badge">Save {{ (((product.mrp - product.cash_price) / product.mrp) * 100)|round|int }}%</span>
+      {% endif %}
       {% if product.image %}
       <img class="market-product-image" src="{{ url_for('public.uploaded_file', filename=product.image) }}" alt="{{ product.brand }} {{ product.name }} {{ product.model }}" loading="lazy">
       {% else %}
@@ -8,10 +11,26 @@
       {% endif %}
     </a>
   </div>
-  <div class="market-product-body market-product-price-only">
-    <div class="market-price-label">MRP</div>
-    <div class="market-price-current">
-      {% if product.mrp is not none %}{{ product.mrp }}{% else %}Price unavailable{% endif %}
+  <div class="market-product-body">
+    {% if product.category %}
+    <span class="market-product-category">{{ product.category.name }}</span>
+    {% endif %}
+    <a class="market-product-title" href="{{ url_for('public.product_detail', product_id=product.id) }}">
+      {{ product.brand }} {{ product.name }}
+    </a>
+    <span class="market-product-model">{{ product.model }}</span>
+    <div class="market-product-prices">
+      {% if product.cash_price is not none %}
+      <span class="market-price-current">Rs. {{ "{:,.0f}".format(product.cash_price|float) }}</span>
+      {% elif product.mrp is not none %}
+      <span class="market-price-current">Rs. {{ "{:,.0f}".format(product.mrp|float) }}</span>
+      {% else %}
+      <span class="market-price-current">Contact for price</span>
+      {% endif %}
+      {% if product.mrp is not none and product.cash_price is not none and product.mrp > product.cash_price %}
+      <del class="market-price-old">Rs. {{ "{:,.0f}".format(product.mrp|float) }}</del>
+      {% endif %}
     </div>
+    <a class="market-product-action" href="{{ url_for('public.product_detail', product_id=product.id) }}">View product <span aria-hidden="true">→</span></a>
   </div>
 </article>

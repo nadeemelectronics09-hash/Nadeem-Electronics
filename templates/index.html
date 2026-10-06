@@ -15,6 +15,10 @@
       {% include 'components/home_featured_products.html' %}
     {% elif section.key == 'new_arrivals' %}
       {% include 'components/home_new_arrivals.html' %}
+    {% elif section.key == 'promotion' %}
+      {% include 'components/home_promotion.html' %}
+    {% elif section.key == 'newsletter' %}
+      {% include 'components/home_newsletter.html' %}
     {% endif %}
   {% endfor %}
 </div>

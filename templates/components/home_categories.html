@@ -1,13 +1,15 @@
 <section class="dashboard-section dashboard-categories">
   <div class="container">
-    <div class="dashboard-section-heading">
+    <div class="dashboard-section-heading dashboard-section-heading-row">
       <div>
-        <h2 class="section-title">Categories</h2>
+        <h2 class="section-title">Shop by category</h2>
+        <p class="section-subtitle">Find the right gear for your everyday setup.</p>
       </div>
+      <a href="{{ url_for('public.categories') }}" class="dashboard-text-link">All categories <span aria-hidden="true">→</span></a>
     </div>
     <div class="row g-3 dashboard-category-grid">
       {% for category in categories %}
-      <div class="col-6 col-md-4 col-lg-3">
+      <div class="col-6 col-md-4 col-xl-2">
         {% set category_card_variant = 'compact' %}
         {% include 'components/category_card.html' %}
       </div>

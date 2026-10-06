@@ -6,8 +6,11 @@
     {% else %}
       <img src="{{ url_for('static', filename='images/placeholder.svg') }}" alt="{{ category.name }}" loading="lazy">
     {% endif %}
-    <span class="dashboard-category-name">{{ category.name }}</span>
-    <span class="dashboard-category-arrow" aria-hidden="true">→</span>
+    <span class="dashboard-category-copy">
+      <span class="dashboard-category-name">{{ category.name }}</span>
+      <span class="dashboard-category-count">{{ category.products|selectattr('is_active')|list|length }} products</span>
+    </span>
+    <span class="dashboard-category-arrow" aria-hidden="true">↗</span>
   </div>
   {% else %}
   <div class="category-card h-100">

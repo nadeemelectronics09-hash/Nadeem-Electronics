@@ -21,6 +21,7 @@ from app.models import (
     AdminUser,
     Category,
     InstallmentPlan,
+    NewsletterSubscriber,
     Product,
     ProductImage,
     ProductSpecification,
@@ -417,6 +418,25 @@ def settings():
         return redirect(url_for("admin.settings"))
 
     return render_template("admin/settings.html", settings=settings)
+
+
+@admin_bp.route("/newsletter", methods=["GET"])
+@login_required
+def newsletter():
+    subscribers = NewsletterSubscriber.query.order_by(
+        NewsletterSubscriber.subscribed_at.desc()
+    ).all()
+    return render_template("admin/newsletter.html", subscribers=subscribers)
+
+
+@admin_bp.route("/newsletter/<int:subscriber_id>/delete", methods=["POST"])
+@login_required
+def delete_newsletter_subscriber(subscriber_id):
+    subscriber = NewsletterSubscriber.query.get_or_404(subscriber_id)
+    db.session.delete(subscriber)
+    db.session.commit()
+    flash("Newsletter subscriber removed.", "success")
+    return redirect(url_for("admin.newsletter"))
 
 
 @admin_bp.route("/design", methods=["GET", "POST"])
