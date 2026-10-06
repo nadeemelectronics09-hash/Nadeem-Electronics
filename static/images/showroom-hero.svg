@@ -1,42 +1,111 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" fill="none">
   <defs>
-    <linearGradient id="display" x1="630" y1="116" x2="1070" y2="456" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#294F77"/>
-      <stop offset="1" stop-color="#11263D"/>
+    <linearGradient id="screen" x1="630" y1="102" x2="1060" y2="395" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0C1935"/>
+      <stop offset=".48" stop-color="#124A7D"/>
+      <stop offset="1" stop-color="#6A36A0"/>
     </linearGradient>
-    <linearGradient id="screen" x1="700" y1="130" x2="990" y2="410" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#A9C6D9"/>
-      <stop offset=".48" stop-color="#507D9F"/>
-      <stop offset="1" stop-color="#183A5B"/>
+    <linearGradient id="aurora" x1="752" y1="133" x2="1053" y2="363" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#42E6E0"/>
+      <stop offset=".48" stop-color="#2A8DF5"/>
+      <stop offset="1" stop-color="#C15BEA"/>
     </linearGradient>
-    <linearGradient id="phone" x1="936" y1="319" x2="1056" y2="566" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#F8FAFC"/>
-      <stop offset="1" stop-color="#B9C8D5"/>
+    <linearGradient id="screenFloor" x1="829" y1="269" x2="826" y2="390" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#172E63" stop-opacity="0"/>
+      <stop offset=".48" stop-color="#0B1733" stop-opacity=".52"/>
+      <stop offset="1" stop-color="#070F24"/>
     </linearGradient>
-    <filter id="shadow" x="554" y="65" width="634" height="583" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-      <feGaussianBlur stdDeviation="22"/>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F8FCFF"/>
+      <stop offset=".35" stop-color="#9FB6CF"/>
+      <stop offset=".72" stop-color="#536B85"/>
+      <stop offset="1" stop-color="#D8E7F3"/>
+    </linearGradient>
+    <linearGradient id="phoneScreen" x1="970" y1="319" x2="1062" y2="532" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#173A69"/>
+      <stop offset=".53" stop-color="#2387BB"/>
+      <stop offset="1" stop-color="#A44AC5"/>
+    </linearGradient>
+    <linearGradient id="speaker" x1="532" y1="314" x2="612" y2="532" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#304863"/>
+      <stop offset=".55" stop-color="#101E33"/>
+      <stop offset="1" stop-color="#263A53"/>
+    </linearGradient>
+    <radialGradient id="ambient" cx="0" cy="0" r="1" gradientTransform="matrix(310 0 0 190 881 366)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#168BFF" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#168BFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="404" y="62" width="782" height="583" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="23"/>
     </filter>
+    <filter id="softGlow" x="630" y="90" width="500" height="370" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <clipPath id="screenClip">
+      <rect x="640" y="114" width="401" height="271" rx="8"/>
+    </clipPath>
   </defs>
-  <ellipse cx="878" cy="585" rx="270" ry="26" fill="#020A12" fill-opacity=".35" filter="url(#shadow)"/>
-  <circle cx="885" cy="332" r="244" stroke="#9AB4CC" stroke-opacity=".1"/>
-  <circle cx="885" cy="332" r="280" stroke="#9AB4CC" stroke-opacity=".06"/>
-  <rect x="608" y="103" width="448" height="326" rx="17" fill="#081522" stroke="#A6BDCF" stroke-opacity=".42" stroke-width="2"/>
-  <rect x="622" y="117" width="420" height="298" rx="9" fill="url(#screen)"/>
-  <path d="M622 336c78-32 126-123 224-102 67 14 91 80 196 42v139H622V336Z" fill="#6E99B4" fill-opacity=".56"/>
-  <path d="M622 372c111-74 162-29 244-62 61-24 108-13 176 15v90H622v-43Z" fill="#163A5C" fill-opacity=".78"/>
-  <path d="M622 415h420" stroke="#C8D7E2" stroke-opacity=".46"/>
-  <path d="M810 430v49m-89 12h178" stroke="#A8BAC8" stroke-opacity=".7" stroke-width="8" stroke-linecap="round"/>
-  <g transform="rotate(7 1014 428)">
-    <rect x="959" y="302" width="111" height="246" rx="23" fill="#081522" stroke="#D7E0E8" stroke-opacity=".58" stroke-width="2"/>
-    <rect x="967" y="311" width="95" height="228" rx="17" fill="url(#phone)"/>
-    <rect x="1002" y="319" width="26" height="5" rx="2.5" fill="#50677B"/>
-    <circle cx="1014" cy="527" r="3" fill="#627A8E"/>
-    <path d="M967 452c28-27 51 12 95-32v96h-95v-64Z" fill="#547C9D" fill-opacity=".66"/>
+
+  <ellipse cx="800" cy="589" rx="348" ry="31" fill="#030A15" fill-opacity=".62" filter="url(#shadow)"/>
+  <ellipse cx="850" cy="381" rx="294" ry="179" fill="url(#ambient)"/>
+  <ellipse cx="839" cy="567" rx="282" ry="18" fill="#3CA9FF" fill-opacity=".12"/>
+
+  <circle cx="834" cy="300" r="259" stroke="#AFD5FF" stroke-opacity=".11"/>
+  <circle cx="834" cy="300" r="299" stroke="#AFD5FF" stroke-opacity=".065"/>
+  <circle cx="683" cy="140" r="3" fill="#BFEAFF"/>
+  <circle cx="1084" cy="205" r="3" fill="#94D5FF"/>
+  <circle cx="1097" cy="412" r="2" fill="#C89BFF"/>
+  <circle cx="673" cy="389" r="2" fill="#83EAE7"/>
+
+  <path d="M662 400c89-48 151-25 234-41 71-14 117-38 173-18v46H662v13Z" fill="#61BCFF" fill-opacity=".16" filter="url(#softGlow)"/>
+
+  <rect x="619" y="88" width="443" height="310" rx="17" fill="#060D18" stroke="#AFC7DF" stroke-opacity=".6" stroke-width="2"/>
+  <rect x="628" y="97" width="425" height="292" rx="12" fill="#0A1423"/>
+  <g clip-path="url(#screenClip)">
+    <rect x="640" y="114" width="401" height="271" fill="url(#screen)"/>
+    <circle cx="953" cy="175" r="77" fill="#F4B6FA" fill-opacity=".27"/>
+    <circle cx="953" cy="175" r="50" fill="#FFD4C2" fill-opacity=".22"/>
+    <path d="M640 322c69-44 112-129 181-131 72-2 91 86 151 76 26-4 47-26 69-40v158H640V322Z" fill="url(#aurora)" fill-opacity=".91"/>
+    <path d="M640 343c66-48 116-39 174-73 61-35 105-57 159-34 25 11 45 29 68 36v113H640v-42Z" fill="#1A76BD" fill-opacity=".9"/>
+    <path d="M640 364c80-43 130-36 203-55 76-20 120-44 198-14v90H640v-21Z" fill="url(#screenFloor)"/>
+    <path d="M773 385l65-140 65 140m-98-62h66" stroke="#CFFAFF" stroke-opacity=".35" stroke-width="2"/>
+    <path d="M640 114h401" stroke="#FFFFFF" stroke-opacity=".15"/>
   </g>
-  <g stroke="#D6E1EA" stroke-linecap="round">
-    <path d="M676 503v-17a50 50 0 0 1 100 0v17" stroke-opacity=".75" stroke-width="12"/>
-    <rect x="667" y="490" width="24" height="46" rx="11" fill="#BCCAD6" stroke="none"/>
-    <rect x="761" y="490" width="24" height="46" rx="11" fill="#BCCAD6" stroke="none"/>
+  <circle cx="840" cy="394" r="2.5" fill="#79CAFF"/>
+  <path d="M833 399v43m-76 13h151" stroke="url(#metal)" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+  <path d="M790 456h86" stroke="#D6E8F7" stroke-opacity=".25" stroke-width="2"/>
+
+  <rect x="690" y="478" width="320" height="27" rx="13.5" fill="#0A1220" stroke="#7188A4" stroke-opacity=".66"/>
+  <path d="M716 487h267" stroke="#D6E8F7" stroke-opacity=".2" stroke-linecap="round"/>
+  <circle cx="975" cy="491" r="2" fill="#45D6FF"/>
+
+  <g>
+    <rect x="520" y="306" width="88" height="229" rx="12" fill="url(#speaker)" stroke="#A5BED7" stroke-opacity=".55" stroke-width="2"/>
+    <path d="M531 319h66" stroke="#D8E8F6" stroke-opacity=".24" stroke-width="2"/>
+    <circle cx="564" cy="359" r="15" fill="#101827" stroke="#7C96B2" stroke-width="2"/>
+    <circle cx="564" cy="359" r="5" fill="#46CBF0"/>
+    <circle cx="564" cy="440" r="39" fill="#080F19" stroke="#A3B8CB" stroke-opacity=".64" stroke-width="2"/>
+    <circle cx="564" cy="440" r="27" fill="#172A3F" stroke="#506B84" stroke-width="2"/>
+    <circle cx="564" cy="440" r="12" fill="#263E57"/>
+    <circle cx="564" cy="440" r="4" fill="#53B9E8"/>
+    <path d="M538 513h52" stroke="#D8E8F6" stroke-opacity=".26" stroke-linecap="round"/>
   </g>
-  <path d="M578 575h541" stroke="#9AB4CC" stroke-opacity=".14"/>
+
+  <g transform="rotate(8 1021 424)">
+    <rect x="962" y="300" width="119" height="248" rx="25" fill="#060D17" stroke="#E3F0FB" stroke-opacity=".75" stroke-width="2"/>
+    <rect x="970" y="309" width="103" height="230" rx="18" fill="url(#phoneScreen)"/>
+    <rect x="1007" y="316" width="29" height="5" rx="2.5" fill="#17273A" fill-opacity=".8"/>
+    <circle cx="1021" cy="531" r="3" fill="#C2DCEC"/>
+    <path d="M970 450c35-31 61-9 103-53v111H970v-58Z" fill="#D6A4FF" fill-opacity=".4"/>
+    <path d="M970 483c26-23 54-18 103-52v77H970v-25Z" fill="#54E0E4" fill-opacity=".46"/>
+  </g>
+
+  <g stroke="#CFE1F0" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M660 525v-22a45 45 0 0 1 90 0v22" stroke-width="12"/>
+    <path d="M673 509v16m64-16v16" stroke="#5ED6F4" stroke-opacity=".72" stroke-width="4"/>
+    <rect x="649" y="504" width="24" height="47" rx="11" fill="#D9E6F1" stroke="none"/>
+    <rect x="738" y="504" width="24" height="47" rx="11" fill="#D9E6F1" stroke="none"/>
+  </g>
+
+  <path d="M487 569h637" stroke="#AED2F2" stroke-opacity=".2"/>
 </svg>

@@ -25,6 +25,20 @@ def category_query():
     return Category.query.order_by(Category.display_order.asc(), Category.name.asc())
 
 
+def product_code_exists(product_code, exclude_product_id=None):
+    query = Product.query.filter(Product.product_code.ilike(product_code))
+    if exclude_product_id is not None:
+        query = query.filter(Product.id != exclude_product_id)
+    return query.first() is not None
+
+
+def category_name_exists(name, exclude_category_id=None):
+    query = Category.query.filter(Category.name.ilike(name))
+    if exclude_category_id is not None:
+        query = query.filter(Category.id != exclude_category_id)
+    return query.first() is not None
+
+
 @admin_bp.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
@@ -92,7 +106,10 @@ def products():
 def add_product():
     if request.method == "POST":
         product_code = request.form.get("product_code", "").strip()
-        if Product.query.filter_by(product_code=product_code).first():
+        if not product_code:
+            flash("Product code is required.", "danger")
+            return redirect(url_for("admin.add_product"))
+        if product_code_exists(product_code):
             flash("Product code already exists.", "danger")
             return redirect(url_for("admin.add_product"))
 
@@ -149,6 +166,12 @@ def edit_product(product_id):
     if request.method == "POST":
         product.category_id = request.form.get("category_id", type=int)
         product.product_code = request.form.get("product_code", "").strip()
+        if not product.product_code:
+            flash("Product code is required.", "danger")
+            return redirect(url_for("admin.edit_product", product_id=product.id))
+        if product_code_exists(product.product_code, exclude_product_id=product.id):
+            flash("Product code already exists.", "danger")
+            return redirect(url_for("admin.edit_product", product_id=product.id))
         product.name = request.form.get("name", "").strip()
         product.brand = request.form.get("brand", "").strip()
         product.model = request.form.get("model", "").strip()
@@ -214,8 +237,16 @@ def categories():
 @login_required
 def add_category():
     if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        if not name:
+            flash("Category name is required.", "danger")
+            return redirect(url_for("admin.add_category"))
+        if category_name_exists(name):
+            flash("Category name already exists.", "danger")
+            return redirect(url_for("admin.add_category"))
+
         category = Category(
-            name=request.form.get("name", "").strip(),
+            name=name,
             description=request.form.get("description", "").strip(),
             display_order=request.form.get("display_order", type=int) or 0,
             is_active=bool(request.form.get("is_active")),
@@ -243,6 +274,12 @@ def edit_category(category_id):
 
     if request.method == "POST":
         category.name = request.form.get("name", "").strip()
+        if not category.name:
+            flash("Category name is required.", "danger")
+            return redirect(url_for("admin.edit_category", category_id=category.id))
+        if category_name_exists(category.name, exclude_category_id=category.id):
+            flash("Category name already exists.", "danger")
+            return redirect(url_for("admin.edit_category", category_id=category.id))
         category.description = request.form.get("description", "").strip()
         category.display_order = request.form.get("display_order", type=int) or 0
         category.is_active = bool(request.form.get("is_active"))
