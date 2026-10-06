@@ -10,9 +10,24 @@ from flask import (
 )
 from flask_login import current_user, login_required, login_user, logout_user
 
+from app.design import (
+    DEFAULT_DESIGN_SETTINGS,
+    FONT_FAMILIES,
+    normalize_design_settings,
+    parse_design_form,
+)
 from app.extensions import db
-from app.models import AdminUser, Category, InstallmentPlan, Product, ProductImage, ProductSpecification, ShopSettings
-from app.utils import save_uploaded_file
+from app.models import (
+    AdminUser,
+    Category,
+    InstallmentPlan,
+    Product,
+    ProductImage,
+    ProductSpecification,
+    ShopSettings,
+    WebsiteDesign,
+)
+from app.utils import allowed_image, save_uploaded_file
 
 admin_bp = Blueprint("admin", __name__)
 
@@ -402,3 +417,64 @@ def settings():
         return redirect(url_for("admin.settings"))
 
     return render_template("admin/settings.html", settings=settings)
+
+
+@admin_bp.route("/design", methods=["GET", "POST"])
+@login_required
+def design():
+    website_design = WebsiteDesign.query.first()
+    settings = normalize_design_settings(
+        website_design.settings if website_design else DEFAULT_DESIGN_SETTINGS
+    )
+
+    if request.method == "POST":
+        if request.form.get("action") == "reset":
+            settings = normalize_design_settings(DEFAULT_DESIGN_SETTINGS)
+            if website_design is None:
+                website_design = WebsiteDesign()
+                db.session.add(website_design)
+            website_design.settings = settings
+            db.session.commit()
+            flash("Website design restored to its default settings.", "success")
+            return redirect(url_for("admin.design"))
+
+        values, errors = parse_design_form(request.form, settings)
+        hero_image = request.files.get("hero_image")
+        if hero_image and hero_image.filename and not allowed_image(hero_image.filename):
+            errors.append("Hero image must be a JPG, JPEG, PNG, or WEBP image.")
+
+        if errors:
+            for error in errors:
+                flash(error, "danger")
+            settings.update(values)
+            return render_template(
+                "admin/design.html",
+                design=settings,
+                font_families=FONT_FAMILIES,
+            )
+
+        if hero_image and hero_image.filename:
+            image_path = save_uploaded_file(hero_image, "design")
+            if not image_path:
+                flash("The hero image could not be saved. Please try another image.", "danger")
+                settings.update(values)
+                return render_template(
+                    "admin/design.html",
+                    design=settings,
+                    font_families=FONT_FAMILIES,
+                )
+            values["hero_image"] = image_path
+
+        if website_design is None:
+            website_design = WebsiteDesign()
+            db.session.add(website_design)
+        website_design.settings = values
+        db.session.commit()
+        flash("Website design updated successfully.", "success")
+        return redirect(url_for("admin.design"))
+
+    return render_template(
+        "admin/design.html",
+        design=settings,
+        font_families=FONT_FAMILIES,
+    )

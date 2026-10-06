@@ -1,23 +1,28 @@
 :root {
     color-scheme: light;
-    --market-ink: #101d31;
-    --market-muted: #748093;
-    --market-blue: #17385e;
-    --market-border: #e7ebf0;
-    --market-bg: #f6f7f9;
-    --market-card: #ffffff;
+    --market-ink: var(--design-text);
+    --market-muted: var(--design-muted);
+    --market-blue: var(--design-primary);
+    --market-border: var(--design-border);
+    --market-bg: var(--design-background);
+    --market-card: var(--design-surface);
     --market-shadow: 0 8px 24px rgba(16, 29, 49, 0.06);
 }
 
 body {
     color: var(--market-ink);
     background: var(--market-bg);
-    font-family: "Segoe UI", Arial, sans-serif;
+    font-family: var(--design-font-family);
     padding-bottom: 0;
 }
 
 main {
     min-height: 55vh;
+}
+
+.homepage-sections {
+    display: flex;
+    flex-direction: column;
 }
 
 .main-header .navbar {
@@ -180,7 +185,7 @@ main {
 }
 
 .dashboard-search-section {
-    padding: 1rem 0;
+    padding: var(--design-spacing-md) 0;
     background: #fff;
     border-bottom: 1px solid var(--market-border);
 }
@@ -194,7 +199,7 @@ main {
     padding: 0.25rem 0.35rem 0.25rem 0.9rem;
     background: #f6f8fa;
     border: 1px solid #e3e8ee;
-    border-radius: 11px;
+    border-radius: var(--design-input-radius);
     transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
 }
 
@@ -234,15 +239,15 @@ main {
     min-height: 38px;
     padding: 0.45rem 0.95rem;
     color: #fff;
-    background: #17385e;
+    background: var(--design-primary);
     border: 0;
-    border-radius: 8px;
+    border-radius: var(--design-button-radius);
     font-size: 0.82rem;
     font-weight: 700;
 }
 
 .dashboard-search button:hover {
-    background: #0f2c4d;
+    background: var(--design-primary-hover);
 }
 
 .header-search .form-control,
@@ -254,7 +259,7 @@ main {
     color: var(--market-ink);
     background-color: white;
     border: 1px solid #dfe4eb;
-    border-radius: 10px;
+    border-radius: var(--design-input-radius);
     min-height: 44px;
 }
 
@@ -281,26 +286,26 @@ main {
 }
 
 .btn {
-    border-radius: 10px;
+    border-radius: var(--design-button-radius);
 }
 
 .btn-primary {
     color: white;
-    background: #17385e;
-    border: 1px solid #17385e;
+    background: var(--design-primary);
+    border: 1px solid var(--design-primary);
     box-shadow: none;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
     color: white;
-    background: #0f2c4d;
-    border-color: #0f2c4d;
+    background: var(--design-primary-hover);
+    border-color: var(--design-primary-hover);
     box-shadow: 0 5px 14px rgba(23, 56, 94, 0.16);
 }
 
 .btn-outline-primary {
-    color: #17385e;
+    color: var(--design-primary);
     background: white;
     border-color: #cbd5e1;
 }
@@ -308,8 +313,8 @@ main {
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
     color: white;
-    background: #17385e;
-    border-color: #17385e;
+    background: var(--design-primary);
+    border-color: var(--design-primary);
 }
 
 .product-contact-icon {
@@ -348,19 +353,19 @@ main {
 
 .product-whatsapp-link {
     color: white;
-    background: #17385e;
-    border: 1px solid #17385e;
+    background: var(--design-primary);
+    border: 1px solid var(--design-primary);
 }
 
 .product-whatsapp-link:hover,
 .product-whatsapp-link:focus-visible {
     color: white;
-    background: #0f2c4d;
-    border-color: #0f2c4d;
+    background: var(--design-primary-hover);
+    border-color: var(--design-primary-hover);
 }
 
 .product-call-link {
-    color: #17385e;
+    color: var(--design-primary);
     background: white;
     border: 1px solid #cbd5e1;
 }
@@ -368,11 +373,12 @@ main {
 .product-call-link:hover,
 .product-call-link:focus-visible {
     color: white;
-    background: #17385e;
-    border-color: #17385e;
+    background: var(--design-primary);
+    border-color: var(--design-primary);
 }
 
 .hero-section {
+    position: relative;
     display: flex;
     min-height: 390px;
     align-items: center;
@@ -382,6 +388,17 @@ main {
     background:
         linear-gradient(90deg, #0a1725 0%, rgba(10, 23, 37, 0.98) 34%, rgba(10, 23, 37, 0.74) 58%, rgba(10, 23, 37, 0.2) 100%),
         url("../images/showroom-hero.svg") right center / auto 100% no-repeat;
+}
+
+.hero-custom-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.45;
+    pointer-events: none;
 }
 
 .hero-section::before,
@@ -493,7 +510,7 @@ h6 {
     color: var(--market-ink);
     background: var(--market-card);
     border: 1px solid var(--market-border);
-    border-radius: 14px;
+    border-radius: var(--design-card-radius);
     box-shadow: var(--market-shadow);
 }
 
@@ -509,7 +526,7 @@ h6 {
     padding: 8px;
     object-fit: cover;
     background: #f1f4f7;
-    border-radius: 14px 14px 0 0;
+    border-radius: var(--design-card-radius) var(--design-card-radius) 0 0;
 }
 
 .category-card h5 {
@@ -544,7 +561,7 @@ h6 {
 
 .product-card .brand,
 .market-product-brand {
-    color: #748093;
+    color: var(--design-muted);
     font-size: 0.68rem;
     font-weight: 800;
     letter-spacing: 0.08em;
@@ -605,7 +622,7 @@ h6 {
 }
 
 .quick-action-icon {
-    color: #17385e;
+    color: var(--design-primary);
     background: #eff3f7;
     border-color: #e4e9ef;
     border-radius: 12px;
@@ -616,7 +633,7 @@ h6 {
 }
 
 .quick-action-arrow {
-    color: #17385e;
+    color: var(--design-primary);
 }
 
 .product-detail-card {
@@ -654,8 +671,8 @@ h6 {
 }
 
 .gallery-thumb.is-active {
-    border-color: #17385e;
-    box-shadow: 0 0 0 1px #17385e;
+    border-color: var(--design-primary);
+    box-shadow: 0 0 0 1px var(--design-primary);
 }
 
 .info-box {
@@ -695,16 +712,16 @@ h6 {
 
 .installment-eyebrow,
 .installment-value-row.is-highlight strong {
-    color: #17385e;
+    color: var(--design-primary);
 }
 
 .installment-model,
 .installment-value-row {
-    color: #748093;
+    color: var(--design-muted);
 }
 
 .duration-pill {
-    color: #17385e;
+    color: var(--design-primary);
     background: #eff3f7;
     border-color: #e2e8ef;
 }
@@ -736,11 +753,11 @@ h6 {
 }
 
 .discount-filter input {
-    accent-color: #17385e;
+    accent-color: var(--design-primary);
 }
 
 .product-detail-price {
-    color: #17385e;
+    color: var(--design-primary);
     font-size: 1.08rem;
 }
 
@@ -836,8 +853,8 @@ h6 {
 
 .btn-dark {
     color: white;
-    background: #101d31;
-    border-color: #101d31;
+    background: var(--design-text);
+    border-color: var(--design-text);
 }
 
 .btn-dark:hover {
@@ -847,7 +864,7 @@ h6 {
 }
 
 .category-product-count {
-    color: #17385e;
+    color: var(--design-primary);
 }
 
 .shop-profile-panel .admin-card {
@@ -870,7 +887,7 @@ h6 {
     color: var(--market-ink);
     background: white;
     border: 1px solid var(--market-border);
-    border-radius: 14px;
+    border-radius: var(--design-card-radius);
     box-shadow: 0 4px 16px rgba(16, 29, 49, 0.045);
     transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
@@ -912,7 +929,7 @@ h6 {
     left: 10px;
     padding: 0.25rem 0.48rem;
     color: white;
-    background: #17385e;
+    background: var(--design-primary);
     border-radius: 6px;
     font-size: 0.67rem;
     font-weight: 750;
@@ -978,18 +995,18 @@ h6 {
 }
 
 .market-price-label {
-    color: #748093;
+    color: var(--design-muted);
     font-size: 0.75rem;
 }
 
 .market-plan-summary {
     margin-top: 0.45rem;
-    color: #748093;
+    color: var(--design-muted);
     font-size: 0.75rem;
 }
 
 .market-plan-summary strong {
-    color: #17385e;
+    color: var(--design-primary);
 }
 
 .market-stock {
@@ -1018,7 +1035,7 @@ h6 {
 }
 
 .market-details-link:hover {
-    color: #17385e;
+    color: var(--design-primary);
 }
 
 .market-empty-state {
@@ -1036,7 +1053,7 @@ h6 {
 }
 
 .dashboard-section {
-    padding: 3.5rem 0;
+    padding: var(--design-spacing-section) 0;
 }
 
 .dashboard-categories,
@@ -1051,7 +1068,7 @@ h6 {
 }
 
 .dashboard-section-heading {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--design-spacing-lg);
 }
 
 .dashboard-section-heading-row {
@@ -1074,7 +1091,7 @@ h6 {
     align-items: center;
     gap: 0.45rem;
     padding: 0.45rem 0;
-    color: #17385e;
+    color: var(--design-primary);
     font-size: 0.82rem;
     font-weight: 700;
     text-decoration: none;
@@ -1107,7 +1124,7 @@ h6 {
     padding: 0.7rem 0.85rem;
     background: #fff;
     border: 1px solid #e8ecf1;
-    border-radius: 11px;
+    border-radius: var(--design-compact-card-radius);
     transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
@@ -1142,12 +1159,12 @@ h6 {
 
 .dashboard-category-card:hover .dashboard-category-arrow {
     transform: translateX(2px);
-    color: #17385e;
+    color: var(--design-primary);
 }
 
 .dashboard-empty-state {
     padding: 1.15rem 1.25rem;
-    color: #748093;
+    color: var(--design-muted);
     background: rgba(255, 255, 255, 0.72);
     border: 1px solid #e8ecf1;
     border-radius: 10px;
@@ -1155,7 +1172,7 @@ h6 {
 }
 
 .dashboard-product-grid .market-product-card {
-    border-radius: 11px;
+    border-radius: var(--design-compact-card-radius);
     box-shadow: 0 3px 12px rgba(16, 29, 49, 0.035);
 }
 
@@ -1297,7 +1314,7 @@ h6 {
 
     .mobile-menu-links .nav-link:hover,
     .mobile-menu-links .nav-link.active {
-        color: #17385e !important;
+        color: var(--design-primary) !important;
         background: #eaf0f6;
     }
 
@@ -1308,7 +1325,7 @@ h6 {
         height: 22px;
         padding: 0 6px;
         color: white;
-        background: #17385e;
+        background: var(--design-primary);
         border-radius: 99px;
         font-size: 0.7rem;
     }
@@ -1344,7 +1361,7 @@ h6 {
     }
 
     .mobile-quick-actions a.active {
-        color: #17385e;
+        color: var(--design-primary);
         background: #f1f4f8;
     }
 
@@ -1355,7 +1372,7 @@ h6 {
         left: 30%;
         right: 30%;
         height: 2px;
-        background: #17385e;
+        background: var(--design-primary);
         border-radius: 2px;
     }
 
@@ -1387,7 +1404,7 @@ h6 {
     }
 
     .dashboard-section {
-        padding: 2.5rem 0;
+        padding: var(--design-spacing-section-mobile) 0;
     }
 
     .dashboard-section-heading {

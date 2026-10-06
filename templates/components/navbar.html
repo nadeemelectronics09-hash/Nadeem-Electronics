@@ -1,0 +1,56 @@
+<header class="main-header">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('public.index') }}">
+        {% if site_settings and site_settings.logo %}
+          <img src="{{ url_for('public.uploaded_file', filename=site_settings.logo) }}" alt="{{ site_settings.shop_name or 'Shop logo' }}" class="brand-logo">
+        {% endif %}
+        <span>{{ site_settings.shop_name if site_settings and site_settings.shop_name else 'Nadeem Electronics' }}</span>
+      </a>
+      <div class="mobile-header-controls">
+        {% if whatsapp_contact_url %}
+        <a class="header-icon-link header-whatsapp-link" href="{{ whatsapp_contact_url }}" target="_blank" rel="noopener noreferrer" aria-label="Contact Nadeem Electronics on WhatsApp" title="Chat with us on WhatsApp">
+          <svg class="whatsapp-mark" viewBox="0 0 24 24" aria-hidden="true">
+            <path class="whatsapp-bubble" d="M12 2.5a9.4 9.4 0 0 0-8.1 14.2L2.7 22l5.4-1.2A9.5 9.5 0 1 0 12 2.5Z"></path>
+            <path class="whatsapp-handset" d="M8.2 7.4c.3-.5.6-.6 1-.6h.4c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4 0 .7.6 1 1.4 1.8 2.4 2.4.3.2.5.2.7-.1l.8-.9c.2-.2.4-.3.7-.2l1.8.9c.3.1.4.3.4.6 0 .4-.3 1.3-.9 1.8-.6.5-1.3.7-2.1.5-1.3-.3-2.7-1.1-4.2-2.6s-2.3-2.9-2.6-4.2c-.2-.8 0-1.5.5-2.1Z"></path>
+          </svg>
+          <span>WhatsApp</span>
+        </a>
+        {% endif %}
+        <button class="navbar-toggler menu-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation menu">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle></svg>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav showroom-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link {% if request.endpoint == 'public.index' %}active{% endif %}" href="{{ url_for('public.index') }}">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link {% if request.endpoint in ['public.shop', 'public.products', 'public.search', 'public.product_detail'] %}active{% endif %}" href="{{ url_for('public.shop') }}">Shop</a></li>
+          <li class="nav-item"><a class="nav-link {% if request.endpoint in ['public.categories', 'public.category_detail'] %}active{% endif %}" href="{{ url_for('public.categories') }}">Categories</a></li>
+          <li class="nav-item nav-secondary-link"><a class="nav-link" href="{{ url_for('public.installments') }}">Installments</a></li>
+          <li class="nav-item nav-secondary-link"><a class="nav-link" href="{{ url_for('public.contact') }}">Contact</a></li>
+        </ul>
+        <ul class="navbar-nav mobile-menu-links">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('public.shop') }}#shop-info">Shop profile</a></li>
+          <li class="nav-item"><a class="nav-link nav-secondary-link" href="{{ url_for('public.installments') }}">Installment plans</a></li>
+          <li class="nav-item"><a class="nav-link nav-secondary-link" href="{{ url_for('public.contact') }}">Contact</a></li>
+          <li class="nav-item"><a class="nav-link admin-menu-link" href="{{ url_for('admin.login') }}">Admin login</a></li>
+        </ul>
+        <div class="header-actions ms-lg-3">
+          {% if whatsapp_contact_url %}
+          <a class="header-icon-link header-whatsapp-link" href="{{ whatsapp_contact_url }}" target="_blank" rel="noopener noreferrer" aria-label="Contact Nadeem Electronics on WhatsApp" title="Chat with us on WhatsApp">
+            <svg class="whatsapp-mark" viewBox="0 0 24 24" aria-hidden="true">
+              <path class="whatsapp-bubble" d="M12 2.5a9.4 9.4 0 0 0-8.1 14.2L2.7 22l5.4-1.2A9.5 9.5 0 1 0 12 2.5Z"></path>
+              <path class="whatsapp-handset" d="M8.2 7.4c.3-.5.6-.6 1-.6h.4c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4 0 .7.6 1 1.4 1.8 2.4 2.4.3.2.5.2.7-.1l.8-.9c.2-.2.4-.3.7-.2l1.8.9c.3.1.4.3.4.6 0 .4-.3 1.3-.9 1.8-.6.5-1.3.7-2.1.5-1.3-.3-2.7-1.1-4.2-2.6s-2.3-2.9-2.6-4.2c-.2-.8 0-1.5.5-2.1Z"></path>
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+          {% endif %}
+          <a class="header-icon-link profile-header-link" href="{{ url_for('public.shop') }}#shop-info" aria-label="Shop profile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+          </a>
+          <a class="btn btn-primary btn-sm admin-link" href="{{ url_for('admin.login') }}">Admin</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from flask_login import UserMixin
+from sqlalchemy import JSON
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .extensions import db
@@ -116,4 +117,12 @@ class ShopSettings(db.Model):
     about_shop = db.Column(db.Text)
     footer_text = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class WebsiteDesign(db.Model):
+    __tablename__ = "website_design"
+
+    id = db.Column(db.Integer, primary_key=True)
+    settings = db.Column(JSON, nullable=False, default=dict)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

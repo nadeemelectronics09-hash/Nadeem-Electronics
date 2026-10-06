@@ -1,0 +1,21 @@
+<section class="dashboard-section dashboard-categories">
+  <div class="container">
+    <div class="dashboard-section-heading">
+      <div>
+        <h2 class="section-title">Categories</h2>
+      </div>
+    </div>
+    <div class="row g-3 dashboard-category-grid">
+      {% for category in categories %}
+      <div class="col-6 col-md-4 col-lg-3">
+        {% set category_card_variant = 'compact' %}
+        {% include 'components/category_card.html' %}
+      </div>
+      {% else %}
+      <div class="col-12">
+        <div class="dashboard-empty-state">No categories yet.</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

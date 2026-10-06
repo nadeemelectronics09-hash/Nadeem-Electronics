@@ -1,0 +1,13 @@
+<form class="{{ search_form_class }}" action="{{ search_action }}" method="get" role="search">
+  {% if search_icon|default(false) %}
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+  {% endif %}
+  <input
+    type="{{ search_input_type }}"
+    class="{{ search_input_class }}"
+    name="{{ search_input_name }}"
+    value="{{ search_input_value }}"
+    placeholder="{{ search_placeholder }}"
+    aria-label="{{ search_aria_label }}">
+  <button type="submit" class="{{ search_button_class }}">{{ search_button_label }}</button>
+</form>

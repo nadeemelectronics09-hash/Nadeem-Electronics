@@ -1,0 +1,16 @@
+<section class="dashboard-search-section">
+  <div class="container">
+    {% set search_form_class = 'dashboard-search' %}
+    {% set search_action = url_for('public.search') %}
+    {% set search_input_name = 'q' %}
+    {% set search_input_value = '' %}
+    {% set search_input_type = 'search' %}
+    {% set search_input_class = '' %}
+    {% set search_button_class = '' %}
+    {% set search_placeholder = 'Search products, brands, or models' %}
+    {% set search_aria_label = search_placeholder %}
+    {% set search_button_label = 'Search' %}
+    {% set search_icon = true %}
+    {% include 'components/search_bar.html' %}
+  </div>
+</section>

@@ -1,22 +1,22 @@
 :root {
-    --primary: #0f6dff;
-    --primary-strong: #0a4ec4;
-    --primary-soft: #edf5ff;
-    --primary-deep: #091a35;
-    --sky: #8fd8ff;
-    --text: #112136;
-    --muted: #64748b;
-    --border: rgba(15, 109, 255, 0.12);
-    --surface: #ffffff;
-    --surface-soft: #f4f9ff;
+    --primary: var(--design-legacy-primary);
+    --primary-strong: var(--design-legacy-primary-hover);
+    --primary-soft: var(--design-primary-soft);
+    --primary-deep: var(--design-legacy-primary-deep);
+    --sky: var(--design-legacy-sky);
+    --text: var(--design-legacy-text);
+    --muted: var(--design-legacy-muted);
+    --border: var(--design-legacy-border);
+    --surface: var(--design-surface);
+    --surface-soft: var(--design-legacy-surface-soft);
     --success: #1fb56d;
     --warning: #f7b32b;
     --danger: #e13d5d;
     --shadow-soft: 0 18px 40px rgba(11, 42, 89, 0.08);
     --shadow-strong: 0 24px 56px rgba(9, 43, 89, 0.17);
-    --radius-lg: 24px;
-    --radius-md: 18px;
-    --radius-sm: 12px;
+    --radius-lg: var(--design-radius-lg);
+    --radius-md: var(--design-radius-md);
+    --radius-sm: var(--design-radius-sm);
 }
 
 html {
@@ -24,7 +24,7 @@ html {
 }
 
 body {
-    font-family: "Segoe UI", Arial, sans-serif;
+    font-family: var(--design-font-family);
     background:
         radial-gradient(circle at top left, rgba(143, 216, 255, 0.32), transparent 28%),
         linear-gradient(180deg, #f6fbff 0%, #eef6ff 100%);

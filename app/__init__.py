@@ -3,7 +3,8 @@ import os
 from flask import Flask
 
 from .extensions import csrf, db, login_manager
-from .models import AdminUser, Category, ShopSettings
+from .design import build_design_css, normalize_design_settings
+from .models import AdminUser, Category, ShopSettings, WebsiteDesign
 from .routes.admin import admin_bp
 from .routes.public import public_bp
 from .utils import whatsapp_product_url, whatsapp_url
@@ -32,6 +33,10 @@ def create_app():
     @app.context_processor
     def inject_globals():
         settings = ShopSettings.query.first()
+        website_design = WebsiteDesign.query.first()
+        design_settings = normalize_design_settings(
+            website_design.settings if website_design else None
+        )
         categories = (
             Category.query.filter_by(is_active=True)
             .order_by(Category.display_order.asc(), Category.name.asc())
@@ -39,6 +44,8 @@ def create_app():
         )
         return {
             "site_settings": settings,
+            "design_settings": design_settings,
+            "design_css": build_design_css(design_settings),
             "nav_categories": categories,
             "whatsapp_contact_url": whatsapp_url(
                 settings,
