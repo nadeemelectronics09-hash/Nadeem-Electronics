@@ -1,66 +1,108 @@
-<header class="main-header">
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('public.index') }}">
+<header class="main-header minimal-header">
+  <div class="minimal-header-top">
+    <div class="container minimal-header-top-inner">
+      <a class="minimal-brand" href="{{ url_for('public.index') }}" aria-label="{{ site_settings.shop_name if site_settings and site_settings.shop_name else 'Nadeem Electronics' }} home">
         {% if site_settings and site_settings.logo %}
-          <img src="{{ url_for('public.uploaded_file', filename=site_settings.logo) }}" alt="{{ site_settings.shop_name or 'Shop logo' }}" class="brand-logo">
+        <img class="minimal-brand-logo" src="{{ url_for('public.uploaded_file', filename=site_settings.logo) }}" alt="">
+        {% else %}
+        <span class="minimal-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3 7h11v11H3zM14 11h4l3 3v4h-7z"></path><circle cx="7.5" cy="19" r="1.5"></circle><circle cx="18" cy="19" r="1.5"></circle></svg>
+        </span>
         {% endif %}
-        <span>{{ site_settings.shop_name if site_settings and site_settings.shop_name else 'Nadeem Electronics' }}</span>
+        <span class="minimal-brand-copy">
+          <span class="minimal-brand-name">{{ site_settings.shop_name if site_settings and site_settings.shop_name else 'Nadeem Electronics' }}</span>
+          <span class="minimal-brand-tagline">Electronics &amp; appliances</span>
+        </span>
       </a>
-      <div class="mobile-header-controls">
-        <a class="header-icon-link mobile-search-link" href="{{ url_for('public.shop') }}#shop-search" aria-label="Search products" title="Search products">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+
+      <form class="minimal-search minimal-search-desktop" action="{{ url_for('public.search') }}" method="get" role="search">
+        <label class="visually-hidden" for="navbarSearchDesktop">Search products</label>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+        <input id="navbarSearchDesktop" type="search" name="q" value="{{ request.args.get('q', '') }}" placeholder="Search for products..." autocomplete="off">
+        <button type="submit" aria-label="Search">Search</button>
+      </form>
+
+      <div class="minimal-header-actions">
+        <a class="minimal-action {% if request.endpoint == 'admin.login' %}is-active{% endif %}" href="{{ url_for('admin.login') }}" aria-label="Admin login" title="Admin login" {% if request.endpoint == 'admin.login' %}aria-current="page"{% endif %}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+          <span>Admin login</span>
         </a>
         {% if whatsapp_contact_url %}
-        <a class="header-icon-link header-whatsapp-link" href="{{ whatsapp_contact_url }}" target="_blank" rel="noopener noreferrer" aria-label="Contact Nadeem Electronics on WhatsApp" title="Chat with us on WhatsApp">
-          <svg class="whatsapp-mark" viewBox="0 0 24 24" aria-hidden="true">
-            <path class="whatsapp-bubble" d="M12 2.5a9.4 9.4 0 0 0-8.1 14.2L2.7 22l5.4-1.2A9.5 9.5 0 1 0 12 2.5Z"></path>
-            <path class="whatsapp-handset" d="M8.2 7.4c.3-.5.6-.6 1-.6h.4c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4 0 .7.6 1 1.4 1.8 2.4 2.4.3.2.5.2.7-.1l.8-.9c.2-.2.4-.3.7-.2l1.8.9c.3.1.4.3.4.6 0 .4-.3 1.3-.9 1.8-.6.5-1.3.7-2.1.5-1.3-.3-2.7-1.1-4.2-2.6s-2.3-2.9-2.6-4.2c-.2-.8 0-1.5.5-2.1Z"></path>
-          </svg>
+        <a class="minimal-action minimal-contact-action" href="{{ whatsapp_contact_url }}" target="_blank" rel="noopener noreferrer" aria-label="Contact {{ site_settings.shop_name if site_settings and site_settings.shop_name else 'Nadeem Electronics' }} on WhatsApp" title="Contact us on WhatsApp">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.1-4.6a8.5 8.5 0 1 1 16.4-3.9Z"></path><path d="M8.7 8.2c.2-.4.5-.6.8-.6h.6l1.1 2.5-.8.9c.6 1.2 1.6 2.2 2.8 2.8l.9-.8 2.5 1.1v.6c0 .4-.2.7-.6.8-1 .5-2.3.3-3.7-.5-1.4-.8-2.6-2-3.4-3.4-.8-1.4-1-2.7-.5-3.4Z"></path></svg>
           <span>WhatsApp</span>
         </a>
         {% endif %}
-        <button class="navbar-toggler menu-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation menu">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path class="menu-line menu-line-top" d="M4 7h16"></path>
-            <path class="menu-line menu-line-middle" d="M4 12h16"></path>
-            <path class="menu-line menu-line-bottom" d="M4 17h16"></path>
-          </svg>
+        <button class="minimal-menu-toggle" type="button" aria-controls="minimalNavigation" aria-expanded="false" aria-label="Open menu" data-navbar-toggle>
+          <svg class="minimal-menu-open-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+          <svg class="minimal-menu-close-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
         </button>
       </div>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav showroom-nav ms-auto align-items-lg-center gap-lg-1">
-          <li class="nav-item"><a class="nav-link {% if request.endpoint == 'public.index' %}active{% endif %}" href="{{ url_for('public.index') }}">Home</a></li>
-          <li class="nav-item"><a class="nav-link {% if request.endpoint in ['public.shop', 'public.products', 'public.search', 'public.product_detail'] %}active{% endif %}" href="{{ url_for('public.shop') }}">Shop</a></li>
-          <li class="nav-item"><a class="nav-link {% if request.endpoint in ['public.categories', 'public.category_detail'] %}active{% endif %}" href="{{ url_for('public.categories') }}">Categories</a></li>
-          <li class="nav-item nav-secondary-link"><a class="nav-link" href="{{ url_for('public.installments') }}">Installments</a></li>
-          <li class="nav-item nav-secondary-link"><a class="nav-link" href="{{ url_for('public.contact') }}">Contact</a></li>
-        </ul>
-        <ul class="navbar-nav mobile-menu-links">
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('public.shop') }}#shop-info">Shop profile</a></li>
-          <li class="nav-item"><a class="nav-link nav-secondary-link" href="{{ url_for('public.installments') }}">Installment plans</a></li>
-          <li class="nav-item"><a class="nav-link nav-secondary-link" href="{{ url_for('public.contact') }}">Contact</a></li>
-          <li class="nav-item"><a class="nav-link admin-menu-link" href="{{ url_for('admin.login') }}">Admin login</a></li>
-        </ul>
-        <div class="header-actions ms-lg-3">
-          <a class="header-icon-link compact-search-link" href="{{ url_for('public.shop') }}#shop-search" aria-label="Search products" title="Search products">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+    </div>
+  </div>
+
+  <div class="minimal-search-mobile-row">
+    <div class="container">
+      <form class="minimal-search minimal-search-mobile" action="{{ url_for('public.search') }}" method="get" role="search">
+        <label class="visually-hidden" for="navbarSearchMobile">Search products</label>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+        <input id="navbarSearchMobile" type="search" name="q" value="{{ request.args.get('q', '') }}" placeholder="Search for products..." autocomplete="off">
+        <button type="submit" aria-label="Search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 14 0m-6-6 6 6-6 6"></path></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <nav class="minimal-nav-row" aria-label="Main navigation">
+    <div class="container">
+      <ul class="minimal-nav-list" id="minimalNavigation" data-navbar-menu>
+        <li>
+          <a class="minimal-nav-link {% if request.endpoint == 'public.index' %}is-active{% endif %}" href="{{ url_for('public.index') }}" {% if request.endpoint == 'public.index' %}aria-current="page"{% endif %}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg><span>Home</span>
           </a>
-          {% if whatsapp_contact_url %}
-          <a class="header-icon-link header-whatsapp-link" href="{{ whatsapp_contact_url }}" target="_blank" rel="noopener noreferrer" aria-label="Contact Nadeem Electronics on WhatsApp" title="Chat with us on WhatsApp">
-            <svg class="whatsapp-mark" viewBox="0 0 24 24" aria-hidden="true">
-              <path class="whatsapp-bubble" d="M12 2.5a9.4 9.4 0 0 0-8.1 14.2L2.7 22l5.4-1.2A9.5 9.5 0 1 0 12 2.5Z"></path>
-              <path class="whatsapp-handset" d="M8.2 7.4c.3-.5.6-.6 1-.6h.4c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4 0 .7.6 1 1.4 1.8 2.4 2.4.3.2.5.2.7-.1l.8-.9c.2-.2.4-.3.7-.2l1.8.9c.3.1.4.3.4.6 0 .4-.3 1.3-.9 1.8-.6.5-1.3.7-2.1.5-1.3-.3-2.7-1.1-4.2-2.6s-2.3-2.9-2.6-4.2c-.2-.8 0-1.5.5-2.1Z"></path>
-            </svg>
-            <span>WhatsApp</span>
+        </li>
+        <li>
+          <a class="minimal-nav-link {% if request.endpoint in ['public.shop', 'public.products', 'public.search', 'public.product_detail'] %}is-active{% endif %}" href="{{ url_for('public.shop') }}" data-shop-link {% if request.endpoint in ['public.shop', 'public.products', 'public.search', 'public.product_detail'] %}aria-current="page"{% endif %}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v13H3z"></path><path d="M8 21h8M12 17v4"></path></svg><span>Shop</span>
           </a>
-          {% endif %}
-          <a class="header-icon-link profile-header-link" href="{{ url_for('public.shop') }}#shop-info" aria-label="Shop profile">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+        </li>
+        <li>
+          <a class="minimal-nav-link {% if request.endpoint in ['public.categories', 'public.category_detail'] %}is-active{% endif %}" href="{{ url_for('public.categories') }}" {% if request.endpoint in ['public.categories', 'public.category_detail'] %}aria-current="page"{% endif %}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="8" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect><rect x="13" y="13" width="8" height="8" rx="2"></rect></svg><span>Categories</span>
           </a>
-          <a class="btn btn-primary btn-sm admin-link" href="{{ url_for('admin.login') }}">Admin</a>
-        </div>
-      </div>
+        </li>
+        <li>
+          <a class="minimal-nav-link" href="{{ url_for('public.shop') }}#shop-info" data-about-link>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg><span>About Us</span>
+          </a>
+        </li>
+        <li>
+          <a class="minimal-nav-link {% if request.endpoint == 'public.contact' %}is-active{% endif %}" href="{{ url_for('public.contact') }}" {% if request.endpoint == 'public.contact' %}aria-current="page"{% endif %}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5Z"></path><path d="M8 9h8M8 12h5"></path></svg><span>Contact</span>
+          </a>
+        </li>
+        <li class="minimal-desktop-only">
+          <a class="minimal-nav-link {% if request.endpoint == 'public.installments' %}is-active{% endif %}" href="{{ url_for('public.installments') }}" {% if request.endpoint == 'public.installments' %}aria-current="page"{% endif %}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h4"></path></svg><span>Installments</span>
+          </a>
+        </li>
+        <li class="minimal-mobile-only">
+          <a class="minimal-nav-link {% if request.endpoint == 'public.installments' %}is-active{% endif %}" href="{{ url_for('public.installments') }}" {% if request.endpoint == 'public.installments' %}aria-current="page"{% endif %}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h4"></path></svg><span>Installments</span>
+          </a>
+        </li>
+        <li class="minimal-mobile-only">
+          <a class="minimal-nav-link" href="{{ url_for('public.shop') }}#shop-info">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10V6l8-3 8 3v4"></path><path d="M5 10h14v10H5zM9 20v-6h6v6"></path><path d="M3 10h18"></path></svg><span>Shop information</span>
+          </a>
+        </li>
+        <li class="minimal-mobile-only">
+          <a class="minimal-nav-link" href="{{ url_for('admin.login') }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span>Admin login</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </nav>
 </header>

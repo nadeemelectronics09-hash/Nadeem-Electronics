@@ -68,7 +68,7 @@
         </div>
         <div class="col-md-6">
           <label class="form-label" for="hero_button_text">Button label</label>
-          <input class="form-control" type="text" id="hero_button_text" name="hero_button_text" maxlength="40" value="{{ design.hero_button_text }}" placeholder="Shop">
+          <input class="form-control" type="text" id="hero_button_text" name="hero_button_text" maxlength="40" value="{{ design.hero_button_text }}" placeholder="Shop now">
         </div>
         <div class="col-12">
           <label class="form-label" for="hero_subtitle">Supporting text</label>
@@ -85,6 +85,24 @@
           <img class="design-current-hero-image" src="{{ url_for('public.uploaded_file', filename=design.hero_image) }}" alt="Current homepage hero">
         </div>
         {% endif %}
+      </div>
+    </section>
+
+    <section class="admin-card p-4 mb-4" aria-labelledby="design-promotion-heading">
+      <h3 id="design-promotion-heading" class="h5 mb-3">Homepage promotion</h3>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label" for="promotion_title">Promotion heading</label>
+          <input class="form-control" type="text" id="promotion_title" name="promotion_title" maxlength="100" value="{{ design.promotion_title }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="promotion_button_text">Installment button label</label>
+          <input class="form-control" type="text" id="promotion_button_text" name="promotion_button_text" maxlength="40" value="{{ design.promotion_button_text }}">
+        </div>
+        <div class="col-12">
+          <label class="form-label" for="promotion_subtitle">Promotion supporting text</label>
+          <textarea class="form-control" id="promotion_subtitle" name="promotion_subtitle" rows="3" maxlength="240">{{ design.promotion_subtitle }}</textarea>
+        </div>
       </div>
     </section>
 
@@ -112,7 +130,7 @@
               </td>
               <td>
                 <select class="form-select" name="section_order_{{ section.key }}" aria-label="{{ section.label }} display order">
-                  {% for order in range(1, 8) %}
+                  {% for order in range(1, design.homepage_sections|length + 1) %}
                   <option value="{{ order }}" {% if section.order == order %}selected{% endif %}>{{ order }}</option>
                   {% endfor %}
                 </select>

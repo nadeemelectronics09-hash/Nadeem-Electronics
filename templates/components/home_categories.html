@@ -1,23 +1,35 @@
-<section class="dashboard-section dashboard-categories">
+<section class="dashboard-section dashboard-categories home-category-section">
   <div class="container">
-    <div class="dashboard-section-heading dashboard-section-heading-row">
-      <div>
-        <h2 class="section-title">Shop by category</h2>
-        <p class="section-subtitle">Find the right gear for your everyday setup.</p>
-      </div>
-      <a href="{{ url_for('public.categories') }}" class="dashboard-text-link">All categories <span aria-hidden="true">→</span></a>
+    <div class="home-category-heading dashboard-section-heading">
+      <span class="home-section-eyebrow">Explore</span>
+      <h2 class="section-title">Shop by Category</h2>
+      <p class="section-subtitle">Find everything you need, all in one place.</p>
     </div>
-    <div class="row g-3 dashboard-category-grid">
+    <div class="home-category-grid">
       {% for category in categories %}
-      <div class="col-6 col-md-4 col-xl-2">
-        {% set category_card_variant = 'compact' %}
-        {% include 'components/category_card.html' %}
-      </div>
+      {% set active_product_count = category.products|selectattr('is_active')|list|length %}
+      <a class="home-category-card" href="{{ url_for('public.category_detail', category_id=category.id) }}" aria-label="Browse {{ category.name }}, {{ active_product_count }} products" title="{{ category.name }}">
+        <span class="home-category-card-image">
+          {% if category.image %}
+          <img src="{{ url_for('public.uploaded_file', filename=category.image) }}" alt="" loading="lazy">
+          {% else %}
+          <svg class="home-category-fallback-icon" viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="7" y="7" width="34" height="34" rx="10"></rect>
+            <path d="M15 19h18v13H15zM19 15h10M20 36h8"></path>
+          </svg>
+          {% endif %}
+        </span>
+        <span class="home-category-card-copy">
+          <span class="home-category-card-name">{{ category.name }}</span>
+          <span class="home-category-card-count">{{ active_product_count }} Products</span>
+        </span>
+      </a>
       {% else %}
-      <div class="col-12">
-        <div class="dashboard-empty-state">No categories yet.</div>
-      </div>
+      <div class="dashboard-empty-state">No categories yet.</div>
       {% endfor %}
+    </div>
+    <div class="home-category-all">
+      <a href="{{ url_for('public.categories') }}" class="dashboard-text-link">View all categories <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>

@@ -1,0 +1,22 @@
+<section class="home-installments-section" aria-labelledby="home-installments-heading">
+  <div class="container">
+    <div class="home-installments">
+      <div class="home-installments-copy">
+        <span class="home-installments-eyebrow">PAYMENT OPTIONS</span>
+        <h2 id="home-installments-heading">Get it today. Pay your way.</h2>
+        {% if active_installment_count %}
+        <p>Explore {{ active_installment_count }} active product installment plan{% if active_installment_count != 1 %}s{% endif %}, with the available amounts and terms shown for each product.</p>
+        {% else %}
+        <p>Contact Nadeem Electronics to ask about installment options for the products you are interested in.</p>
+        {% endif %}
+        <a class="home-installments-cta" href="{{ url_for('public.installments') }}">Explore installment plans <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="home-installments-points">
+        <div><span aria-hidden="true">✓</span><span>See plans for individual products</span></div>
+        <div><span aria-hidden="true">✓</span><span>Review the listed down payment and monthly amount</span></div>
+        <div><span aria-hidden="true">✓</span><span>Compare available durations and plan details</span></div>
+        <div><span aria-hidden="true">✓</span><span>Ask the shop about product availability</span></div>
+      </div>
+    </div>
+  </div>
+</section>

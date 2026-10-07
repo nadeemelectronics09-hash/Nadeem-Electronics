@@ -1,0 +1,546 @@
+:root {
+    --navbar-primary: var(--design-primary, #0066ff);
+    --navbar-text: #14213d;
+    --navbar-muted: #6b7280;
+    --navbar-border: #e5e7eb;
+    --navbar-hover: #f5f9ff;
+}
+
+.main-header.minimal-header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    color: var(--navbar-text);
+    background: #fff;
+    border-bottom: 1px solid var(--navbar-border);
+    box-shadow: 0 4px 18px rgba(20, 33, 61, 0.055);
+}
+
+.minimal-header-top {
+    background: #fff;
+}
+
+.minimal-header-top-inner {
+    display: grid;
+    min-height: 76px;
+    grid-template-columns: minmax(185px, 0.85fr) minmax(300px, 1.6fr) minmax(175px, 0.8fr);
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.75rem);
+}
+
+.minimal-brand {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--navbar-text);
+    text-decoration: none;
+}
+
+.minimal-brand:hover {
+    color: var(--navbar-text);
+}
+
+.minimal-brand-logo,
+.minimal-brand-mark {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 11px;
+}
+
+.minimal-brand-logo {
+    object-fit: contain;
+    background: #fff;
+}
+
+.minimal-brand-mark {
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: var(--navbar-primary);
+}
+
+.minimal-brand-mark svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.minimal-brand-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.18rem;
+    line-height: 1.15;
+}
+
+.minimal-brand-name {
+    overflow: hidden;
+    font-size: 0.98rem;
+    font-weight: 790;
+    letter-spacing: -0.035em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.minimal-brand-tagline {
+    color: var(--navbar-muted);
+    font-size: 0.64rem;
+    font-weight: 550;
+    letter-spacing: 0.025em;
+}
+
+.minimal-search {
+    display: flex;
+    min-width: 0;
+    min-height: 42px;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.2rem 0.25rem 0.2rem 0.85rem;
+    background: #fff;
+    border: 1px solid var(--navbar-border);
+    border-radius: 11px;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.minimal-search:focus-within {
+    border-color: var(--navbar-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--navbar-primary) 12%, transparent);
+}
+
+.minimal-search > svg {
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    fill: none;
+    stroke: #8792a2;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+}
+
+.minimal-search input {
+    width: 100%;
+    min-width: 0;
+    height: 36px;
+    padding: 0;
+    color: var(--navbar-text);
+    background: transparent;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    font-size: 0.82rem;
+}
+
+.minimal-search input::placeholder {
+    color: #8993a1;
+}
+
+.minimal-search input::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+.minimal-search button {
+    display: grid;
+    min-width: 70px;
+    height: 36px;
+    flex: 0 0 auto;
+    place-items: center;
+    padding: 0 0.85rem;
+    color: #fff;
+    background: var(--navbar-primary);
+    border: 0;
+    border-radius: 8px;
+    font-size: 0.76rem;
+    font-weight: 740;
+    transition: background-color 150ms ease;
+}
+
+.minimal-search button:hover {
+    background: var(--design-primary-hover, #0052cc);
+}
+
+.minimal-search-mobile-row {
+    display: none;
+}
+
+.minimal-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.6rem;
+}
+
+.minimal-action {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.5rem;
+    color: #43516a;
+    border-radius: 9px;
+    font-size: 0.72rem;
+    font-weight: 680;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 150ms ease, background-color 150ms ease;
+}
+
+.minimal-action:hover,
+.minimal-action:focus-visible,
+.minimal-action.is-active {
+    color: var(--navbar-primary);
+    background: var(--navbar-hover);
+}
+
+.minimal-action svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.65;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.minimal-nav-row {
+    min-height: 46px;
+    background: #fff;
+    border-top: 1px solid #f0f1f4;
+}
+
+.minimal-nav-row > .container {
+    min-height: 46px;
+}
+
+.minimal-nav-list {
+    display: flex;
+    min-height: 46px;
+    align-items: stretch;
+    gap: clamp(1.1rem, 2.5vw, 2.2rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.minimal-nav-list > li {
+    display: flex;
+}
+
+.minimal-nav-link {
+    position: relative;
+    display: inline-flex;
+    min-height: 46px;
+    align-items: center;
+    gap: 0.45rem;
+    color: #48556a;
+    font-size: 0.79rem;
+    font-weight: 620;
+    text-decoration: none;
+    transition: color 150ms ease;
+}
+
+.minimal-nav-link::after {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: var(--navbar-primary);
+    border-radius: 2px 2px 0 0;
+    content: "";
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 150ms ease;
+}
+
+.minimal-nav-link:hover,
+.minimal-nav-link:focus-visible,
+.minimal-nav-link.is-active {
+    color: var(--navbar-primary);
+}
+
+.minimal-nav-link.is-active {
+    font-weight: 760;
+}
+
+.minimal-nav-link.is-active::after {
+    transform: scaleX(1);
+}
+
+.minimal-nav-link > svg {
+    display: none;
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.65;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.minimal-mobile-only {
+    display: none !important;
+}
+
+.minimal-menu-toggle {
+    display: none;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    place-items: center;
+    padding: 0;
+    color: #43516a;
+    background: #fff;
+    border: 1px solid var(--navbar-border);
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.minimal-menu-toggle:hover,
+.minimal-menu-toggle:focus-visible,
+.minimal-header.is-menu-open .minimal-menu-toggle {
+    color: var(--navbar-primary);
+    background: var(--navbar-hover);
+    border-color: color-mix(in srgb, var(--navbar-primary) 26%, #fff);
+}
+
+.minimal-menu-toggle > svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.minimal-menu-close-icon {
+    display: none;
+}
+
+.minimal-header.is-menu-open .minimal-menu-open-icon {
+    display: none;
+}
+
+.minimal-header.is-menu-open .minimal-menu-close-icon {
+    display: block;
+}
+
+.minimal-header :focus-visible {
+    outline: 2px solid var(--navbar-primary);
+    outline-offset: 3px;
+}
+
+@media (max-width: 1199.98px) and (min-width: 992px) {
+    .minimal-header-top-inner {
+        grid-template-columns: minmax(170px, 0.8fr) minmax(270px, 1.4fr) minmax(145px, 0.7fr);
+        gap: 1rem;
+    }
+
+    .minimal-action {
+        gap: 0.3rem;
+        padding-right: 0.35rem;
+        padding-left: 0.35rem;
+    }
+
+    .minimal-nav-list {
+        gap: 1.35rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .main-header.minimal-header {
+        z-index: 1050;
+    }
+
+    .minimal-header-top-inner {
+        display: flex;
+        min-height: 62px;
+        gap: 0.65rem;
+    }
+
+    .minimal-brand {
+        flex: 1 1 auto;
+        gap: 0.55rem;
+    }
+
+    .minimal-brand-logo,
+    .minimal-brand-mark {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+        border-radius: 10px;
+    }
+
+    .minimal-brand-name {
+        font-size: 0.9rem;
+    }
+
+    .minimal-brand-tagline {
+        display: none;
+    }
+
+    .minimal-search-desktop {
+        display: none;
+    }
+
+    .minimal-header-actions {
+        flex: 0 0 auto;
+        gap: 0.35rem;
+    }
+
+    .minimal-action {
+        width: 38px;
+        min-height: 38px;
+        padding: 0;
+    }
+
+    .minimal-action > span {
+        display: none;
+    }
+
+    .minimal-action svg {
+        width: 19px;
+        height: 19px;
+    }
+
+    .minimal-menu-toggle {
+        display: grid;
+    }
+
+    .minimal-search-mobile-row {
+        display: block;
+        padding: 0 0 0.65rem;
+        background: #fff;
+    }
+
+    .minimal-search-mobile {
+        min-height: 40px;
+        background: #f8fafc;
+    }
+
+    .minimal-search-mobile input {
+        height: 34px;
+        font-size: 0.78rem;
+    }
+
+    .minimal-search-mobile button {
+        width: 34px;
+        min-width: 34px;
+        height: 34px;
+        padding: 0;
+    }
+
+    .minimal-search-mobile button svg {
+        width: 17px;
+        height: 17px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .minimal-nav-row {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        display: none;
+        max-height: calc(100vh - 125px);
+        overflow-y: auto;
+        background: #fff;
+        border-top: 1px solid var(--navbar-border);
+        box-shadow: 0 16px 28px rgba(20, 33, 61, 0.12);
+    }
+
+    .minimal-header.is-menu-open .minimal-nav-row {
+        display: block;
+    }
+
+    .minimal-nav-row > .container {
+        padding-top: 0.55rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .minimal-nav-list {
+        display: grid;
+        min-height: 0;
+        gap: 0.2rem;
+    }
+
+    .minimal-nav-list > li {
+        display: block;
+    }
+
+    .minimal-nav-link {
+        display: flex;
+        min-height: 46px;
+        gap: 0.7rem;
+        padding: 0.55rem 0.7rem;
+        border-radius: 9px;
+        font-size: 0.83rem;
+    }
+
+    .minimal-nav-link::after {
+        display: none;
+    }
+
+    .minimal-nav-link:hover,
+    .minimal-nav-link:focus-visible,
+    .minimal-nav-link.is-active {
+        background: var(--navbar-hover);
+    }
+
+    .minimal-nav-link > svg {
+        display: block;
+    }
+
+    .minimal-mobile-only {
+        display: block !important;
+    }
+
+    .minimal-desktop-only {
+        display: none !important;
+    }
+}
+
+@media (max-width: 359.98px) {
+    .minimal-header-top-inner,
+    .minimal-search-mobile-row > .container {
+        padding-right: 0.75rem;
+        padding-left: 0.75rem;
+    }
+
+    .minimal-brand-name {
+        max-width: 155px;
+        font-size: 0.84rem;
+    }
+
+    .minimal-header-actions {
+        gap: 0.25rem;
+    }
+
+    .minimal-action,
+    .minimal-menu-toggle {
+        width: 35px;
+        height: 35px;
+        flex-basis: 35px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .minimal-header *,
+    .minimal-header *::before,
+    .minimal-header *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}

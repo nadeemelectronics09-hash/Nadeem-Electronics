@@ -12,7 +12,7 @@ from flask import (
     send_from_directory,
     url_for,
 )
-from sqlalchemy import or_
+from sqlalchemy import func, or_
 from sqlalchemy.exc import IntegrityError
 
 from app.extensions import db
@@ -35,7 +35,18 @@ def index():
     categories = Category.query.filter_by(is_active=True).order_by(Category.display_order.asc(), Category.name.asc()).all()
     featured_products = Product.query.filter_by(is_active=True, featured=True).limit(6).all()
     latest_products = Product.query.filter_by(is_active=True).order_by(Product.created_at.desc()).limit(8).all()
-    return render_template("index.html", categories=categories, featured_products=featured_products, latest_products=latest_products)
+    active_installment_count = (
+        InstallmentPlan.query.join(Product)
+        .filter(Product.is_active.is_(True), InstallmentPlan.is_active.is_(True))
+        .count()
+    )
+    return render_template(
+        "index.html",
+        categories=categories,
+        featured_products=featured_products,
+        latest_products=latest_products,
+        active_installment_count=active_installment_count,
+    )
 
 
 @public_bp.route("/products")
@@ -210,7 +221,12 @@ def shop():
         query = query.order_by(Product.cash_price.asc().nullslast())
     elif sort == "price_high":
         query = query.order_by(Product.cash_price.desc().nullslast())
+    elif sort == "name":
+        query = query.order_by(Product.name.asc(), Product.id.asc())
+    elif sort == "featured":
+        query = query.order_by(Product.featured.desc(), Product.created_at.desc())
     else:
+        sort = "newest"
         query = query.order_by(Product.created_at.desc())
 
     products_page = query.paginate(page=page, per_page=12, error_out=False)
@@ -222,11 +238,30 @@ def shop():
         .order_by(Product.brand.asc())
         .all()
     ]
+    category_counts = dict(
+        db.session.query(Category.id, func.count(Product.id))
+        .join(Product, Product.category_id == Category.id)
+        .filter(Category.is_active.is_(True), Product.is_active.is_(True))
+        .group_by(Category.id)
+        .all()
+    )
+    price_bounds = (
+        db.session.query(func.min(Product.cash_price), func.max(Product.cash_price))
+        .filter(Product.is_active.is_(True), Product.cash_price.isnot(None))
+        .one()
+    )
+    catalog_total = Product.query.filter_by(is_active=True).count()
+    price_minimum = float(price_bounds[0]) if price_bounds[0] is not None else 0
+    price_maximum = float(price_bounds[1]) if price_bounds[1] is not None else 0
     return render_template(
         "shop.html",
         settings=settings,
         products_page=products_page,
         brands=brands,
+        catalog_total=catalog_total,
+        category_counts=category_counts,
+        price_minimum=price_minimum,
+        price_maximum=price_maximum,
         filters={
             "search": search_term,
             "category": category_id,

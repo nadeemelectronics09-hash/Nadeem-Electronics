@@ -10,31 +10,38 @@ FONT_FAMILIES = {
 }
 
 SECTION_DEFAULTS = (
-    {"key": "search", "label": "Product search", "visible": True, "order": 1},
-    {"key": "hero", "label": "Hero banner", "visible": True, "order": 2},
+    {"key": "search", "label": "Product search", "visible": True, "order": 10},
+    {"key": "hero", "label": "Hero banner", "visible": True, "order": 1},
+    {"key": "benefits", "label": "Store information benefits", "visible": True, "order": 2},
     {"key": "categories", "label": "Categories", "visible": True, "order": 3},
     {"key": "featured", "label": "Featured products", "visible": True, "order": 4},
-    {"key": "new_arrivals", "label": "New arrivals", "visible": True, "order": 5},
-    {"key": "promotion", "label": "Installment promotion", "visible": True, "order": 6},
-    {"key": "newsletter", "label": "Email updates signup", "visible": True, "order": 7},
+    {"key": "promotion", "label": "Promotional banner", "visible": True, "order": 5},
+    {"key": "new_arrivals", "label": "New arrivals", "visible": True, "order": 6},
+    {"key": "installments", "label": "Installment information", "visible": True, "order": 7},
+    {"key": "why_choose_us", "label": "Why shop with us", "visible": True, "order": 8},
+    {"key": "category_promos", "label": "Category highlights", "visible": True, "order": 9},
+    {"key": "newsletter", "label": "Email updates signup", "visible": True, "order": 11},
 )
 
 DEFAULT_DESIGN_SETTINGS = {
-    "primary_color": "#17385e",
+    "primary_color": "#0066ff",
     "accent_color": "#168bff",
-    "background_color": "#f6f7f9",
+    "background_color": "#f7f9fc",
     "surface_color": "#ffffff",
-    "text_color": "#101d31",
-    "muted_color": "#748093",
-    "border_color": "#e7ebf0",
+    "text_color": "#14213d",
+    "muted_color": "#6b7280",
+    "border_color": "#e5e7eb",
     "font_family": "system",
     "button_radius": 10,
     "card_radius": 14,
     "section_spacing": 56,
     "hero_title": "",
-    "hero_subtitle": "Shop TVs, speakers, phones and more, with trusted advice and flexible installment options.",
-    "hero_button_text": "Shop",
+    "hero_subtitle": "Discover the latest electronics at great prices with easy installment options.",
+    "hero_button_text": "Shop now",
     "hero_image": "",
+    "promotion_title": "Upgrade your setup",
+    "promotion_subtitle": "Explore current products and available installment plans from Nadeem Electronics.",
+    "promotion_button_text": "Explore installments",
     "homepage_sections": [
         {
             "key": section["key"],
@@ -83,6 +90,9 @@ def normalize_design_settings(settings):
         ("hero_title", 100),
         ("hero_subtitle", 240),
         ("hero_button_text", 40),
+        ("promotion_title", 100),
+        ("promotion_subtitle", 240),
+        ("promotion_button_text", 40),
     ):
         value = source.get(field)
         if isinstance(value, str):
@@ -114,6 +124,36 @@ def normalize_design_settings(settings):
                     "order": order if isinstance(order, int) and 1 <= order <= len(SECTION_DEFAULTS) else default["order"],
                 }
             )
+        saved_keys = {
+            section.get("key")
+            for section in sections
+            if isinstance(section, dict) and section.get("key") in {item["key"] for item in SECTION_DEFAULTS}
+        }
+        legacy_keys = {"search", "hero", "categories", "featured", "new_arrivals", "promotion", "newsletter"}
+        if legacy_keys.issubset(saved_keys) and not {
+            "benefits",
+            "installments",
+            "why_choose_us",
+            "category_promos",
+        }.issubset(saved_keys):
+            by_key = {section["key"]: section for section in normalized_sections}
+            legacy_sections = sorted(
+                (by_key[key] for key in legacy_keys),
+                key=lambda section: (section["order"], next(i for i, item in enumerate(SECTION_DEFAULTS) if item["key"] == section["key"])),
+            )
+            additions_after = {
+                "hero": ("benefits",),
+                "categories": ("category_promos",),
+                "featured": ("why_choose_us",),
+                "promotion": ("installments",),
+            }
+            ordered_keys = []
+            for section in legacy_sections:
+                ordered_keys.append(section["key"])
+                ordered_keys.extend(additions_after.get(section["key"], ()))
+            order_by_key = {key: index for index, key in enumerate(ordered_keys, 1)}
+            for section in normalized_sections:
+                section["order"] = order_by_key.get(section["key"], section["order"])
         result["homepage_sections"] = normalized_sections
 
     return result
@@ -157,6 +197,9 @@ def parse_design_form(form, current_settings):
         ("hero_title", 100),
         ("hero_subtitle", 240),
         ("hero_button_text", 40),
+        ("promotion_title", 100),
+        ("promotion_subtitle", 240),
+        ("promotion_button_text", 40),
     ):
         value = form.get(field, "").strip()
         if len(value) > limit:

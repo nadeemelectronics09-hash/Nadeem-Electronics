@@ -3,9 +3,12 @@
     <div class="home-promotion">
       <div class="home-promotion-copy">
         <span class="home-promotion-eyebrow">FLEXIBLE WAYS TO BUY</span>
-        <h2 id="home-promotion-heading">The upgrade you want.<br>Payments that work for you.</h2>
-        <p>Explore available installment plans on selected products and find an option that fits your budget.</p>
-        <a class="home-promotion-cta" href="{{ url_for('public.installments') }}">Explore installment plans <span aria-hidden="true">→</span></a>
+        <h2 id="home-promotion-heading">{{ design_settings.promotion_title or 'Upgrade your setup' }}</h2>
+        <p>{{ design_settings.promotion_subtitle or 'Explore current products and available installment plans from Nadeem Electronics.' }}</p>
+        <div class="home-promotion-actions">
+          <a class="home-promotion-cta" href="{{ url_for('public.shop') }}">Shop now <span aria-hidden="true">→</span></a>
+          <a class="home-promotion-secondary" href="{{ url_for('public.installments') }}">{{ design_settings.promotion_button_text or 'Explore installments' }} <span aria-hidden="true">↗</span></a>
+        </div>
       </div>
       <div class="home-promotion-art" aria-hidden="true">
         <span class="home-promotion-orbit"></span>

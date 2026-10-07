@@ -1,9 +1,9 @@
-<div class="mobile-quick-actions" aria-label="Main navigation">
+<nav class="mobile-quick-actions" aria-label="Main navigation">
   <a class="{% if request.endpoint == 'public.index' %}active{% endif %}" href="{{ url_for('public.index') }}">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg>
     <span>Home</span>
   </a>
-  <a class="{% if request.endpoint in ['public.shop', 'public.products', 'public.search', 'public.product_detail'] %}active{% endif %}" href="{{ url_for('public.shop') }}">
+  <a class="{% if request.endpoint in ['public.shop', 'public.products', 'public.search', 'public.product_detail'] %}active{% endif %}" href="{{ url_for('public.shop') }}" data-quick-shop-link>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v13H3z"></path><path d="M8 21h8M12 17v4"></path><path d="M7 8h4M7 11h8"></path></svg>
     <span>Shop</span>
   </a>
@@ -11,7 +11,11 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="8" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect><rect x="13" y="13" width="8" height="8" rx="2"></rect></svg>
     <span>Categories</span>
   </a>
-</div>
+  <a href="{{ url_for('public.shop') }}#shop-info" data-quick-about-link>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>
+    <span>About Us</span>
+  </a>
+</nav>
 
 <footer class="site-footer" id="site-footer">
   <div class="container">

@@ -106,10 +106,19 @@ Public pages extend `templates/base.html`. Shared public layout is kept in
 
 - `navbar.html`, `footer.html`, and `flash_messages.html` control the shared
   navigation, footer/mobile navigation, and flash alerts.
+- The public navbar is included once from `templates/base.html`; its responsive
+  layout and menu behavior live in `static/css/navbar.css` and
+  `static/js/navbar.js`.
 - `hero.html`, `search_bar.html`, and `category_card.html` are included by the
   pages that use those elements.
 - `templates/_product_card.html` is the shared product card used by product
   listings.
+- The Shop page uses `templates/shop.html` and
+  `templates/components/shop_product_card.html`; its dynamic catalog filters
+  and sorting are handled by the existing Shop route, while
+  `static/js/shop.js` controls the responsive filter panel, price range, and
+  grid/list presentation. Shop-specific styling lives in
+  `static/css/light-market.css`.
 - Admin pages continue to extend `templates/admin/layout.html`; the shared
   flash-message component is used there too.
 
@@ -126,6 +135,13 @@ component once. To update product-card markup, edit
 `templates/_product_card.html`. Existing Flask routes, page templates, and
 admin forms continue to provide their own content and behavior.
 
+The homepage is assembled from reusable `templates/components/home_*.html`
+sections in the order saved by Website Design. The design editor controls
+section visibility/order, hero content/artwork, global colors, and the
+promotional banner copy. Homepage category, product, and installment content
+is rendered from the existing database; these settings are stored in the
+existing `website_design` JSON record.
+
 The shared footer uses the shop profile's configured logo, description, hours,
 phone numbers, email, address, map, and social links. Phone/email/map/social
 actions are only rendered as working links when the corresponding setting is
@@ -137,10 +153,11 @@ database table. On startup, SQLAlchemy's `create_all()` creates that new table
 when it is missing; it does not replace existing catalog tables or records.
 The controls cover global storefront colors, built-in font choices, button and
 card corner radius, section spacing, hero heading/subtitle/button/image, and
-visibility/order of the homepage search, hero, categories, featured products,
-new arrivals, installment promotion, and newsletter areas. Uploaded hero
-artwork is stored under the existing uploads directory. Resetting design
-settings does not delete catalog content.
+visibility/order of the homepage search, hero, benefits, categories, featured
+products, promotion, new arrivals, installment information, category highlights,
+why-shop-with-us, and newsletter areas. Hero and promotion text can be edited
+from the same page. Uploaded hero artwork is stored under the existing uploads
+directory. Resetting design settings does not delete catalog content.
 
 The homepage also includes an installment-plan promotion and email updates
 signup. Newsletter addresses are validated, stored separately in the

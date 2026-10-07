@@ -1,0 +1,47 @@
+<article class="shop-product-card">
+  <div class="shop-product-image-wrap">
+    <a class="shop-product-image-link" href="{{ url_for('public.product_detail', product_id=product.id) }}" aria-label="View {{ product.name }}">
+      {% if product.featured %}<span class="shop-product-badge shop-featured-badge">Featured</span>{% endif %}
+      {% if product.mrp is not none and product.cash_price is not none and product.mrp > product.cash_price and product.mrp > 0 %}
+      <span class="shop-product-badge shop-discount-badge">Save {{ (((product.mrp - product.cash_price) / product.mrp) * 100)|round|int }}%</span>
+      {% endif %}
+      {% if product.image %}
+      <img src="{{ url_for('public.uploaded_file', filename=product.image) }}" alt="{{ product.brand }} {{ product.name }} {{ product.model }}" loading="lazy">
+      {% else %}
+      <img src="{{ url_for('static', filename='images/placeholder.svg') }}" alt="{{ product.name }} product image placeholder" loading="lazy">
+      {% endif %}
+    </a>
+  </div>
+  <div class="shop-product-content">
+    {% if product.category %}<span class="shop-product-category">{{ product.category.name }}</span>{% endif %}
+    <h3><a href="{{ url_for('public.product_detail', product_id=product.id) }}">{{ product.brand }} {{ product.name }}</a></h3>
+    {% if product.model %}<p class="shop-product-model">{{ product.model }}</p>{% endif %}
+    {% if product.short_description %}<p class="shop-product-description">{{ product.short_description }}</p>{% endif %}
+    <div class="shop-product-price">
+      {% if product.cash_price is not none %}
+      <strong>Rs. {{ "{:,.0f}".format(product.cash_price|float) }}</strong>
+      {% elif product.mrp is not none %}
+      <strong>Rs. {{ "{:,.0f}".format(product.mrp|float) }}</strong>
+      {% else %}
+      <strong>Contact for price</strong>
+      {% endif %}
+      {% if product.mrp is not none and product.cash_price is not none and product.mrp > product.cash_price %}
+      <del>Rs. {{ "{:,.0f}".format(product.mrp|float) }}</del>
+      {% endif %}
+    </div>
+    {% if product.stock_status %}
+    <p class="shop-product-stock {% if 'out' in product.stock_status|lower %}is-unavailable{% endif %}">
+      <span aria-hidden="true"></span>{{ product.stock_status }}
+    </p>
+    {% endif %}
+    <div class="shop-product-actions">
+      <a class="shop-product-details" href="{{ url_for('public.product_detail', product_id=product.id) }}">View details <span aria-hidden="true">→</span></a>
+      {% if whatsapp_product_url(product) %}
+      <a class="shop-product-inquiry" href="{{ whatsapp_product_url(product) }}" target="_blank" rel="noopener noreferrer" aria-label="Ask about {{ product.name }} on WhatsApp">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8.5 8.5 0 0 0-7.2 13l-.8 4 4-1A8.5 8.5 0 1 0 12 3Z"></path><path d="M9 8.5c.4 2.2 2.3 4.1 4.5 4.5"></path></svg>
+        Ask about this
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</article>

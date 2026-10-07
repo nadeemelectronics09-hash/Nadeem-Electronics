@@ -3,12 +3,14 @@
 {% block title %}Home | Nadeem Electronics{% endblock %}
 
 {% block content %}
-<div class="homepage-sections">
+<div class="homepage-sections home-page">
   {% for section in design_settings.homepage_sections|sort(attribute='order') if section.visible %}
     {% if section.key == 'search' %}
       {% include 'components/home_search.html' %}
     {% elif section.key == 'hero' %}
       {% include 'components/hero.html' %}
+    {% elif section.key == 'benefits' %}
+      {% include 'components/home_benefits.html' %}
     {% elif section.key == 'categories' %}
       {% include 'components/home_categories.html' %}
     {% elif section.key == 'featured' %}
@@ -17,6 +19,12 @@
       {% include 'components/home_new_arrivals.html' %}
     {% elif section.key == 'promotion' %}
       {% include 'components/home_promotion.html' %}
+    {% elif section.key == 'installments' %}
+      {% include 'components/home_installments.html' %}
+    {% elif section.key == 'why_choose_us' %}
+      {% include 'components/home_why_choose_us.html' %}
+    {% elif section.key == 'category_promos' %}
+      {% include 'components/home_category_promos.html' %}
     {% elif section.key == 'newsletter' %}
       {% include 'components/home_newsletter.html' %}
     {% endif %}

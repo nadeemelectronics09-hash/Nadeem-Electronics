@@ -3,93 +3,231 @@
 {% block title %}Shop | Nadeem Electronics{% endblock %}
 
 {% block content %}
-<section class="py-5">
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-      <div>
-        <span class="eyebrow-label">THE COLLECTION</span>
-        <h1 class="section-title mb-0">Shop products</h1>
-        <p class="section-subtitle mb-0">{{ products_page.total }} products in the catalog</p>
+<div class="shop-page">
+  <section class="shop-hero">
+    <div class="container shop-hero-inner">
+      <div class="shop-hero-copy">
+        <nav class="shop-breadcrumb" aria-label="Breadcrumb">
+          <a href="{{ url_for('public.index') }}">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Shop</span>
+        </nav>
+        <span class="shop-kicker">THE COLLECTION</span>
+        <h1>Shop electronics, made simple.</h1>
+        <p>Discover the latest electronics with clear product details and flexible installment options.</p>
+        <a class="shop-hero-cta" href="#shop-products">Explore products <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="shop-hero-art" aria-hidden="true">
+        <img src="{{ url_for('static', filename='images/showroom-hero.svg') }}" alt="" fetchpriority="high">
       </div>
     </div>
+  </section>
 
-    <form class="shop-filters mb-4" id="shop-search" action="{{ url_for('public.shop') }}" method="get">
-      <div class="row g-2">
-        <div class="col-lg-4">
-          <input class="form-control" type="search" name="search" value="{{ filters.search }}" placeholder="Search products, brands, models, codes, categories..." aria-label="Search shop products">
-        </div>
-        <div class="col-sm-6 col-lg-2">
-          <select class="form-select" name="category" aria-label="Filter by category">
-            <option value="">All categories</option>
-            {% for category in nav_categories %}
-            <option value="{{ category.id }}" {% if filters.category == category.id %}selected{% endif %}>{{ category.name }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="col-sm-6 col-lg-2">
-          <select class="form-select" name="brand" aria-label="Filter by brand">
-            <option value="">All brands</option>
-            {% for brand in brands %}
-            <option value="{{ brand }}" {% if filters.brand == brand %}selected{% endif %}>{{ brand }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="col-sm-6 col-lg-2">
-          <select class="form-select" name="sort" aria-label="Sort products">
-            <option value="newest" {% if filters.sort == 'newest' %}selected{% endif %}>Newest</option>
-            <option value="price_low" {% if filters.sort == 'price_low' %}selected{% endif %}>Price: low to high</option>
-            <option value="price_high" {% if filters.sort == 'price_high' %}selected{% endif %}>Price: high to low</option>
-          </select>
-        </div>
-        <div class="col-sm-6 col-lg-2">
-          <select class="form-select" name="availability" aria-label="Filter by availability">
-            <option value="" {% if not filters.availability %}selected{% endif %}>Any availability</option>
-            <option value="available" {% if filters.availability == 'available' %}selected{% endif %}>Available</option>
-            <option value="unavailable" {% if filters.availability == 'unavailable' %}selected{% endif %}>Unavailable</option>
-          </select>
-        </div>
-        <div class="col-sm-6 col-lg-2">
-          <input class="form-control" type="number" min="0" step="0.01" name="min_price" value="{{ filters.min_price if filters.min_price is not none else '' }}" placeholder="Min price" aria-label="Minimum price">
-        </div>
-        <div class="col-sm-6 col-lg-2">
-          <input class="form-control" type="number" min="0" step="0.01" name="max_price" value="{{ filters.max_price if filters.max_price is not none else '' }}" placeholder="Max price" aria-label="Maximum price">
-        </div>
-        <div class="col-sm-6 col-lg-2">
-          <label class="discount-filter"><input type="checkbox" name="discount" value="1" {% if filters.discount %}checked{% endif %}> Discounted</label>
-        </div>
-        <div class="col-sm-6 col-lg-2 d-grid">
-          <button class="btn btn-primary" type="submit">Apply</button>
-        </div>
-      </div>
-    </form>
+  <section class="shop-main-section" id="shop-products">
+    <div class="container">
+      <form class="shop-catalog-form" id="shop-search" action="{{ url_for('public.shop') }}" method="get">
+        <div class="shop-layout">
+          <aside class="shop-sidebar" id="shopFilters" aria-label="Shop filters">
+            <div class="shop-filter-card">
+              <div class="shop-filter-heading">
+                <h2>Filters</h2>
+                <a href="{{ url_for('public.shop') }}">Clear all</a>
+              </div>
 
-    <div class="row g-4">
-      {% for product in products_page.items %}
-      <div class="col-6 col-lg-4">{% include '_product_card.html' %}</div>
-      {% else %}
-      <div class="col-12"><div class="empty-state"><h2>No products found</h2><p>Try changing your search or filters.</p></div></div>
-      {% endfor %}
-    </div>
+              <section class="shop-filter-group" aria-labelledby="shop-categories-heading">
+                <h3 id="shop-categories-heading">Categories</h3>
+                <a class="shop-category-option {% if not filters.category %}is-active{% endif %}" href="{{ url_for('public.shop') }}" {% if not filters.category %}aria-current="page"{% endif %}>
+                  <span class="shop-category-initial" aria-hidden="true">All</span>
+                  <span>All products</span>
+                  <span class="shop-option-count">{{ catalog_total }}</span>
+                </a>
+                {% for category in nav_categories %}
+                <a class="shop-category-option {% if filters.category == category.id %}is-active{% endif %}" href="{{ url_for('public.shop', category=category.id, search=filters.search, brand=filters.brand, sort=filters.sort, min_price=filters.min_price, max_price=filters.max_price, availability=filters.availability, discount=1 if filters.discount else None) }}" {% if filters.category == category.id %}aria-current="page"{% endif %}>
+                  <span class="shop-category-initial" aria-hidden="true">{{ category.name[:2]|upper }}</span>
+                  <span>{{ category.name }}</span>
+                  <span class="shop-option-count">{{ category_counts.get(category.id, 0) }}</span>
+                </a>
+                {% endfor %}
+              </section>
 
-    {% if products_page.pages > 1 %}
-    <nav aria-label="Shop product pagination" class="mt-5">
-      <ul class="pagination justify-content-center">
-        {% if products_page.has_prev %}
-        <li class="page-item"><a class="page-link" href="{{ url_for('public.shop', page=products_page.prev_num, search=filters.search, category=filters.category, brand=filters.brand, sort=filters.sort, min_price=filters.min_price, max_price=filters.max_price, availability=filters.availability, discount=1 if filters.discount else None) }}">Previous</a></li>
+              <section class="shop-filter-group" aria-labelledby="shop-price-heading">
+                <h3 id="shop-price-heading">Price range</h3>
+                <div class="shop-range-values">
+                  <span id="shopMinPriceLabel">Rs. {{ "{:,.0f}".format(filters.min_price if filters.min_price is not none else price_minimum) }}</span>
+                  <span aria-hidden="true">—</span>
+                  <span id="shopMaxPriceLabel">Rs. {{ "{:,.0f}".format(filters.max_price if filters.max_price is not none else price_maximum) }}</span>
+                </div>
+                <div class="shop-dual-range" data-range-min="{{ price_minimum }}" data-range-max="{{ price_maximum }}">
+                  <div class="shop-range-track" aria-hidden="true"><span></span></div>
+                  <input class="shop-range-input" id="shopMinPriceRange" type="range" min="{{ price_minimum }}" max="{{ price_maximum }}" step="1" value="{{ filters.min_price if filters.min_price is not none else price_minimum }}" aria-label="Minimum product price" {% if price_maximum <= price_minimum %}disabled{% endif %}>
+                  <input class="shop-range-input" id="shopMaxPriceRange" type="range" min="{{ price_minimum }}" max="{{ price_maximum }}" step="1" value="{{ filters.max_price if filters.max_price is not none else price_maximum }}" aria-label="Maximum product price" {% if price_maximum <= price_minimum %}disabled{% endif %}>
+                  <input type="hidden" name="min_price" id="shopMinPriceValue" value="{{ filters.min_price if filters.min_price is not none else '' }}">
+                  <input type="hidden" name="max_price" id="shopMaxPriceValue" value="{{ filters.max_price if filters.max_price is not none else '' }}">
+                </div>
+                <p class="shop-filter-hint">Prices are based on listed product prices.</p>
+              </section>
+
+              {% if brands %}
+              <section class="shop-filter-group" aria-labelledby="shop-brands-heading">
+                <h3 id="shop-brands-heading">Brand</h3>
+                <p class="shop-filter-hint">Choose one brand at a time.</p>
+                <div class="shop-brand-list">
+                  {% for brand in brands %}
+                  <label class="shop-brand-option">
+                    <input type="checkbox" name="brand" value="{{ brand }}" {% if filters.brand == brand %}checked{% endif %}>
+                    <span>{{ brand }}</span>
+                  </label>
+                  {% endfor %}
+                </div>
+              </section>
+              {% endif %}
+
+              <section class="shop-filter-group" aria-labelledby="shop-availability-heading">
+                <h3 id="shop-availability-heading">Availability</h3>
+                <label class="shop-select-label" for="shopAvailability">Stock status</label>
+                <select class="form-select" name="availability" id="shopAvailability">
+                  <option value="" {% if not filters.availability %}selected{% endif %}>Any availability</option>
+                  <option value="available" {% if filters.availability == 'available' %}selected{% endif %}>Available</option>
+                  <option value="unavailable" {% if filters.availability == 'unavailable' %}selected{% endif %}>Unavailable</option>
+                </select>
+                <label class="shop-discount-option">
+                  <input type="checkbox" name="discount" value="1" {% if filters.discount %}checked{% endif %}>
+                  <span>Discounted products</span>
+                </label>
+              </section>
+
+              {% if filters.category %}<input type="hidden" name="category" value="{{ filters.category }}">{% endif %}
+              <button class="shop-apply-button" type="submit">Apply filters</button>
+            </div>
+          </aside>
+
+          <div class="shop-results">
+            <div class="shop-results-heading">
+              <div>
+                <span class="shop-kicker">FIND YOUR NEXT FAVORITE</span>
+                <h2>Explore the collection</h2>
+                <p>Browse our current electronics selection.</p>
+              </div>
+              <button class="shop-filter-toggle" type="button" aria-expanded="false" aria-controls="shopFilters" data-shop-filter-toggle>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10m-7 6h4"></path></svg>
+                Filters
+              </button>
+            </div>
+
+            <div class="shop-toolbar">
+              <div class="shop-toolbar-search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+                <input class="form-control" type="search" name="search" value="{{ filters.search }}" placeholder="Search products, brands or models" aria-label="Search products, brands or models">
+                <button type="submit" class="shop-search-submit">Search</button>
+              </div>
+              <p class="shop-result-count">
+                {% if products_page.total %}
+                Showing <strong>{{ (products_page.page - 1) * products_page.per_page + 1 }}–{{ [products_page.page * products_page.per_page, products_page.total]|min }}</strong> of <strong>{{ products_page.total }}</strong> products
+                {% else %}
+                No matching products
+                {% endif %}
+              </p>
+              <div class="shop-toolbar-controls">
+                <label for="shopSort">Sort by</label>
+                <select class="form-select" id="shopSort" name="sort" data-shop-sort>
+                  <option value="newest" {% if filters.sort == 'newest' %}selected{% endif %}>Newest first</option>
+                  <option value="price_low" {% if filters.sort == 'price_low' %}selected{% endif %}>Price: low to high</option>
+                  <option value="price_high" {% if filters.sort == 'price_high' %}selected{% endif %}>Price: high to low</option>
+                  <option value="name" {% if filters.sort == 'name' %}selected{% endif %}>Name: A–Z</option>
+                  <option value="featured" {% if filters.sort == 'featured' %}selected{% endif %}>Featured</option>
+                </select>
+                <div class="shop-view-toggle" role="group" aria-label="Product display">
+                  <button type="button" class="is-active" data-shop-view="grid" aria-label="Grid view" aria-pressed="true">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg>
+                  </button>
+                  <button type="button" data-shop-view="list" aria-label="List view" aria-pressed="false">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r=".8"></circle><circle cx="4.5" cy="12" r=".8"></circle><circle cx="4.5" cy="18" r=".8"></circle></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="shop-product-grid" data-shop-grid>
+              {% for product in products_page.items %}
+              <div class="shop-product-cell">{% include 'components/shop_product_card.html' %}</div>
+              {% else %}
+              <div class="shop-empty-state">
+                <span class="shop-empty-icon" aria-hidden="true">⌕</span>
+                <h3>No products found</h3>
+                <p>Try another search or clear some filters to see more products.</p>
+                <a class="shop-empty-link" href="{{ url_for('public.shop') }}">Clear filters</a>
+              </div>
+              {% endfor %}
+            </div>
+
+            {% if products_page.pages > 1 %}
+            <nav aria-label="Shop product pagination" class="shop-pagination">
+              <ul class="pagination justify-content-center">
+                {% if products_page.has_prev %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('public.shop', page=products_page.prev_num, search=filters.search, category=filters.category, brand=filters.brand, sort=filters.sort, min_price=filters.min_price, max_price=filters.max_price, availability=filters.availability, discount=1 if filters.discount else None) }}" aria-label="Previous page">Previous</a></li>
+                {% endif %}
+                {% for page_num in products_page.iter_pages() %}
+                  {% if page_num %}
+                  <li class="page-item {% if products_page.page == page_num %}active{% endif %}"><a class="page-link" href="{{ url_for('public.shop', page=page_num, search=filters.search, category=filters.category, brand=filters.brand, sort=filters.sort, min_price=filters.min_price, max_price=filters.max_price, availability=filters.availability, discount=1 if filters.discount else None) }}" {% if products_page.page == page_num %}aria-current="page"{% endif %}>{{ page_num }}</a></li>
+                  {% else %}
+                  <li class="page-item disabled"><span class="page-link" aria-hidden="true">…</span></li>
+                  {% endif %}
+                {% endfor %}
+                {% if products_page.has_next %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('public.shop', page=products_page.next_num, search=filters.search, category=filters.category, brand=filters.brand, sort=filters.sort, min_price=filters.min_price, max_price=filters.max_price, availability=filters.availability, discount=1 if filters.discount else None) }}" aria-label="Next page">Next</a></li>
+                {% endif %}
+              </ul>
+            </nav>
+            {% endif %}
+          </div>
+        </div>
+      </form>
+
+      {% if nav_categories %}
+      <section class="shop-promotions" aria-labelledby="shop-promotions-heading">
+        <div class="shop-section-heading">
+          <div><span class="shop-kicker">MADE FOR EVERYDAY</span><h2 id="shop-promotions-heading">Explore by category</h2></div>
+          <a href="{{ url_for('public.categories') }}">All categories <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="shop-promo-grid">
+          {% for category in nav_categories[:3] %}
+          <a class="shop-promo-card" href="{{ url_for('public.category_detail', category_id=category.id) }}">
+            <div class="shop-promo-copy">
+              <span>Explore the range</span>
+              <h3>{{ category.name }}</h3>
+              <span class="shop-promo-link">Browse products <span aria-hidden="true">→</span></span>
+            </div>
+            {% if category.image %}
+            <img src="{{ url_for('public.uploaded_file', filename=category.image) }}" alt="" loading="lazy">
+            {% else %}
+            <span class="shop-promo-monogram" aria-hidden="true">{{ category.name[:1]|upper }}</span>
+            {% endif %}
+          </a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      <section class="shop-benefits" aria-label="Shopping information">
+        <a class="shop-benefit" href="{{ url_for('public.installments') }}">
+          <span class="shop-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h4"></path></svg></span>
+          <span><strong>Installment plans</strong><small>Explore available product plans</small></span>
+        </a>
+        <a class="shop-benefit" href="{{ url_for('public.categories') }}">
+          <span class="shop-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg></span>
+          <span><strong>Browse categories</strong><small>Find products by department</small></span>
+        </a>
+        <a class="shop-benefit" href="{{ url_for('public.contact') }}">
+          <span class="shop-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5Z"></path><path d="M8 9h8M8 12h5"></path></svg></span>
+          <span><strong>Talk to our team</strong><small>Get help with a product inquiry</small></span>
+        </a>
+        {% if whatsapp_contact_url %}
+        <a class="shop-benefit" href="{{ whatsapp_contact_url }}" target="_blank" rel="noopener noreferrer">
+          <span class="shop-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3a8.5 8.5 0 0 0-7.2 13l-.8 4 4-1A8.5 8.5 0 1 0 12 3Z"></path><path d="M9 8.5c.4 2.2 2.3 4.1 4.5 4.5"></path></svg></span>
+          <span><strong>Product inquiries</strong><small>Message the shop on WhatsApp</small></span>
+        </a>
         {% endif %}
-        {% for page_num in products_page.iter_pages() %}
-          {% if page_num %}
-          <li class="page-item {% if products_page.page == page_num %}active{% endif %}"><a class="page-link" href="{{ url_for('public.shop', page=page_num, search=filters.search, category=filters.category, brand=filters.brand, sort=filters.sort, min_price=filters.min_price, max_price=filters.max_price, availability=filters.availability, discount=1 if filters.discount else None) }}">{{ page_num }}</a></li>
-          {% else %}
-          <li class="page-item disabled"><span class="page-link">…</span></li>
-          {% endif %}
-        {% endfor %}
-        {% if products_page.has_next %}
-        <li class="page-item"><a class="page-link" href="{{ url_for('public.shop', page=products_page.next_num, search=filters.search, category=filters.category, brand=filters.brand, sort=filters.sort, min_price=filters.min_price, max_price=filters.max_price, availability=filters.availability, discount=1 if filters.discount else None) }}">Next</a></li>
-        {% endif %}
-      </ul>
-    </nav>
-    {% endif %}
+      </section>
 
     <div id="shop-info" class="shop-profile-panel row g-4 mt-5">
       <div class="col-lg-6">
@@ -130,5 +268,9 @@
       </div>
     </div>
   </div>
-</section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/shop.js') }}"></script>
 {% endblock %}
